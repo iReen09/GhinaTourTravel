@@ -18,6 +18,6 @@ class Tempat extends Model
 
     public function fotos()
     {
-        return $this->hasMany(Foto::class);
+        return $this->hasMany(Foto::class, 'id_tempat');
     }
 }

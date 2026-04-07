@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('path');
-            $table->unsignedBigInteger('id_tempat');
+            $table->unsignedBigInteger('id_paket')->nullable();
+            $table->foreign('id_paket')->references('id')->on('pakets')->onDelete('cascade');
+            $table->unsignedBigInteger('id_tempat')->nullable();
             $table->foreign('id_tempat')->references('id')->on('tempats')->onDelete('cascade');
         });
     }

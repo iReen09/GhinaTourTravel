@@ -38,7 +38,7 @@ class Paket extends Model
 
     public function fotos()
     {
-        return $this->hasManyThrough(Foto::class, Tempat::class, 'id_paket', 'id_tempat');
+        return $this->hasMany(Foto::class, 'id_paket');
     }
 
     public static function booted()

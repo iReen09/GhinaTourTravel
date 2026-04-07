@@ -8,14 +8,16 @@ use App\Models\Tempat;
 use App\Models\Konsumsi;
 use App\Models\Akomodasi;
 use App\Models\Transportasi;
+use App\Models\Foto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PaketController extends Controller
 {
     public function index()
     {
-        $pakets = Paket::with(['tempats', 'konsumsis', 'akomodasis', 'transportasis'])
+        $pakets = Paket::with(['tempats', 'konsumsis', 'akomodasis', 'transportasis', 'fotos'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
         return view('admin.paket.index', compact('pakets'));
@@ -32,6 +34,8 @@ class PaketController extends Controller
             'nama_paket' => 'required|string|max:255',
             'harga_paket' => 'required|numeric|min:0',
             'note' => 'nullable|string',
+            'fotos' => 'nullable|array',
+            'fotos.*' => 'nullable|image|max:2048',
             'tempats' => 'nullable|array',
             'tempats.*' => 'nullable|string|max:255',
             'konsumsis' => 'nullable|array',
@@ -50,6 +54,7 @@ class PaketController extends Controller
             ]);
 
             $this->saveRelatedModels($paket, $validated);
+            $this->saveFotos($paket, $validated);
         });
 
         return redirect()->route('admin.paket.index')
@@ -58,13 +63,13 @@ class PaketController extends Controller
 
     public function show(Paket $paket)
     {
-        $paket->load(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis']);
+        $paket->load(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis', 'fotos']);
         return view('admin.paket.show', compact('paket'));
     }
 
     public function edit(Paket $paket)
     {
-        $paket->load(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis']);
+        $paket->load(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis', 'fotos']);
         return view('admin.paket.edit', compact('paket'));
     }
 
@@ -74,6 +79,8 @@ class PaketController extends Controller
             'nama_paket' => 'required|string|max:255',
             'harga_paket' => 'required|numeric|min:0',
             'note' => 'nullable|string',
+            'fotos' => 'nullable|array',
+            'fotos.*' => 'nullable|image|max:2048',
             'tempats' => 'nullable|array',
             'tempats.*' => 'nullable|string|max:255',
             'konsumsis' => 'nullable|array',
@@ -98,8 +105,17 @@ class PaketController extends Controller
                 $tempat->fotos()->delete();
             });
             $paket->tempats()->delete();
+            
+            // Delete old direct fotos
+            foreach ($paket->fotos as $foto) {
+                if ($foto->path) {
+                    Storage::disk('public')->delete($foto->path);
+                }
+            }
+            $paket->fotos()->delete();
 
             $this->saveRelatedModels($paket, $validated);
+            $this->saveFotos($paket, $validated);
         });
 
         return redirect()->route('admin.paket.index')
@@ -149,6 +165,21 @@ class PaketController extends Controller
                     'id_paket' => $paket->id,
                     'fasilitas_transportasi' => $fasilitas,
                 ]);
+            }
+        }
+    }
+
+    private function saveFotos(Paket $paket, array $data)
+    {
+        if (!empty($data['fotos'])) {
+            foreach ($data['fotos'] as $foto) {
+                if ($foto) {
+                    $path = $foto->store('fotos', 'public');
+                    Foto::create([
+                        'id_paket' => $paket->id,
+                        'path' => $path,
+                    ]);
+                }
             }
         }
     }
