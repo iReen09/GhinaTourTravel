@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\PaketController;
 use App\Http\Controllers\Customer\PageController;
 use Illuminate\Support\Facades\Route;
@@ -20,14 +21,7 @@ Route::get('/photos', [PageController::class, 'photos'])->name('photos');
 | Admin Routes
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->group(function () {
-    Route::resource('paket', PaketController::class)->names([
-        'index' => 'admin.paket.index',
-        'create' => 'admin.paket.create',
-        'store' => 'admin.paket.store',
-        'show' => 'admin.paket.show',
-        'edit' => 'admin.paket.edit',
-        'update' => 'admin.paket.update',
-        'destroy' => 'admin.paket.destroy',
-    ]);
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('paket', PaketController::class);
+    Route::resource('gallery', GalleryController::class);
 });

@@ -11,7 +11,6 @@ class Paket extends Model
         'harga_paket',
         'durasi',
         'deskripsi',
-        'pax',
         'minimal_pax',
         'note',
     ];
