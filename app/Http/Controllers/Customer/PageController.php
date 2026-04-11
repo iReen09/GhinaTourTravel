@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Customer;
 
-use App\Models\Paket;
+use App\Http\Controllers\Controller;
 use App\Models\Foto;
+use App\Models\Paket;
 use Illuminate\Http\Request;
 
-class FrontendController extends Controller
+class PageController extends Controller
 {
     /**
      * Display the home page.
@@ -22,7 +23,7 @@ class FrontendController extends Controller
             ->take(8)
             ->get();
 
-        return view('frontend.index', compact('pakets', 'fotos'));
+        return view('customer.index', compact('pakets', 'fotos'));
     }
 
     /**
@@ -34,7 +35,7 @@ class FrontendController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(9);
 
-        return view('frontend.packages', compact('pakets'));
+        return view('customer.packages', compact('pakets'));
     }
 
     /**
@@ -50,7 +51,7 @@ class FrontendController extends Controller
             ->take(3)
             ->get();
 
-        return view('frontend.package-detail', compact('paket', 'relatedPakets'));
+        return view('customer.package-detail', compact('paket', 'relatedPakets'));
     }
 
     /**
@@ -62,7 +63,7 @@ class FrontendController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(12);
 
-        return view('frontend.photos', compact('fotos'));
+        return view('customer.photos', compact('fotos'));
     }
 
     /**
@@ -80,6 +81,6 @@ class FrontendController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(9);
 
-        return view('frontend.packages', compact('pakets', 'query'));
+        return view('customer.packages', compact('pakets', 'query'));
     }
 }

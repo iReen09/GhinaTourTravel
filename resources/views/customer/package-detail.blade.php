@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('customer.layouts.app')
 
 @section('title', $paket->nama_paket . ' — Ghina Tour Travel')
 @section('description', $paket->deskripsi)

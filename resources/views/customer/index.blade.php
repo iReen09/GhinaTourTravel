@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('customer.layouts.app')
 
 @section('title', 'Ghina Tour Travel — Serving With Love')
 

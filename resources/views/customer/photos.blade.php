@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('customer.layouts.app')
 
 @section('title', 'Galeri Foto — Ghina Tour Travel')
 

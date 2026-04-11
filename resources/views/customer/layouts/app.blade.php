@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ asset('frontend/output.css') }}" />
+  <link rel="stylesheet" href="{{ asset('customer/output.css') }}" />
   
   <style>
     *, body { font-family: 'Poppins', sans-serif; }
@@ -92,7 +92,7 @@
 <nav id="navbar" class="fixed inset-x-0 top-5 z-50 mx-auto w-full max-w-[1280px] px-14">
   <div class="nav-bg mx-auto flex h-[78px] items-center justify-between rounded-2xl px-7 transition-all duration-300">
     <a href="{{ route('home') }}" class="flex items-center gap-3">
-      <img src="{{ asset('frontend/assets/images/logos/logo.png') }}" alt="Logo" class="h-[50px] w-auto object-contain"
+      <img src="{{ asset('customer/assets/images/logos/logo.png') }}" alt="Logo" class="h-[50px] w-auto object-contain"
            onerror="this.onerror=null;this.src='';this.style.display='none';document.getElementById('lf').style.display='flex';" />
       <div id="lf" class="hidden h-10 w-10 items-center justify-center rounded-full font-black text-black text-lg" style="background:var(--gold);">G</div>
       <div>
@@ -126,7 +126,7 @@
   <div class="mx-auto grid max-w-[1280px] grid-cols-4 gap-10">
     <div>
       <div class="mb-4 flex items-center gap-3">
-        <img src="{{ asset('frontend/assets/images/logos/logo.png') }}" alt="Logo" class="h-[40px] w-auto" />
+        <img src="{{ asset('customer/assets/images/logos/logo.png') }}" alt="Logo" class="h-[40px] w-auto" />
         <div>
           <div class="font-bold">Ghina Tour Travel</div>
           <div class="text-[10px]" style="color:var(--gold);">Serving With Love</div>

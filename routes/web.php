@@ -1,19 +1,19 @@
 <?php
 
 use App\Http\Controllers\Admin\PaketController;
-use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\Customer\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Frontend Routes (Customer Side)
+| Customer Routes (Customer Side)
 |--------------------------------------------------------------------------
 */
-Route::get('/', [FrontendController::class, 'index'])->name('home');
-Route::get('/packages', [FrontendController::class, 'packages'])->name('packages');
-Route::get('/packages/search', [FrontendController::class, 'search'])->name('packages.search');
-Route::get('/package/{id}', [FrontendController::class, 'packageDetail'])->name('package.detail');
-Route::get('/photos', [FrontendController::class, 'photos'])->name('photos');
+Route::get('/', [PageController::class, 'index'])->name('home');
+Route::get('/packages', [PageController::class, 'packages'])->name('packages');
+Route::get('/packages/search', [PageController::class, 'search'])->name('packages.search');
+Route::get('/package/{id}', [PageController::class, 'packageDetail'])->name('package.detail');
+Route::get('/photos', [PageController::class, 'photos'])->name('photos');
 
 /*
 |--------------------------------------------------------------------------

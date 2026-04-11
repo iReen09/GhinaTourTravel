@@ -4,11 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Paket;
-use App\Models\Tempat;
-use App\Models\Konsumsi;
-use App\Models\Akomodasi;
-use App\Models\Transportasi;
-use App\Models\Foto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -17,9 +12,10 @@ class PaketController extends Controller
 {
     public function index()
     {
-        $pakets = Paket::with(['tempats', 'konsumsis', 'akomodasis', 'transportasis', 'fotos'])
+        $pakets = Paket::with(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+
         return view('admin.paket.index', compact('pakets'));
     }
 
@@ -30,93 +26,126 @@ class PaketController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama_paket' => 'required|string|max:255',
-            'harga_paket' => 'required|numeric|min:0',
-            'note' => 'nullable|string',
-            'fotos' => 'nullable|array',
-            'fotos.*' => 'nullable|image|max:2048',
-            'tempats' => 'nullable|array',
-            'tempats.*' => 'nullable|string|max:255',
-            'konsumsis' => 'nullable|array',
-            'konsumsis.*' => 'nullable|string|max:255',
-            'akomodasis' => 'nullable|array',
-            'akomodasis.*' => 'nullable|string|max:255',
-            'transportasis' => 'nullable|array',
-            'transportasis.*' => 'nullable|string|max:255',
+        $request->validate([
+            'nama_paket'      => 'required|string|max:255',
+            'harga_paket'     => 'required|numeric',
+            'durasi'          => 'required|integer',
+            'deskripsi'       => 'nullable|string',
+            'pax'             => 'required|integer',
+            'note'            => 'nullable|string',
+
+            // Nested Tempat + Fotos (files)
+            'tempats'                  => 'nullable|array',
+            'tempats.*.nama_tempat'    => 'required|string|max:255',
+            'tempats.*.fotos'          => 'nullable|array',
+            'tempats.*.fotos.*'        => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120', // max 5MB per image
+
+            // Other relations (text only)
+            'konsumsis'                => 'nullable|array',
+            'konsumsis.*.fasilitas_konsumsi' => 'required|string',
+
+            'akomodasis'               => 'nullable|array',
+            'akomodasis.*.fasilitas_akomodasi' => 'required|string',
+
+            'transportasis'            => 'nullable|array',
+            'transportasis.*.fasilitas_transportasi' => 'required|string',
         ]);
 
-        DB::transaction(function () use ($validated) {
-            $paket = Paket::create([
-                'nama_paket' => $validated['nama_paket'],
-                'harga_paket' => $validated['harga_paket'],
-                'note' => $validated['note'] ?? null,
-            ]);
+        DB::beginTransaction();
 
-            $this->saveRelatedModels($paket, $validated);
-            $this->saveFotos($paket, $validated);
-        });
+        try {
+            $paket = Paket::create($request->only([
+                'nama_paket', 'harga_paket', 'durasi', 'deskripsi', 'pax', 'note'
+            ]));
 
-        return redirect()->route('admin.paket.index')
-            ->with('success', 'Paket berhasil ditambahkan');
+            // === Handle Tempat + Foto Uploads ===
+            if ($request->has('tempats')) {
+                foreach ($request->tempats as $index => $tempatData) {
+                    $tempat = $paket->tempats()->create([
+                        'nama_tempat' => $tempatData['nama_tempat']
+                    ]);
+
+                    // Handle multiple photos for this tempat
+                    if ($request->hasFile("tempats.{$index}.fotos")) {
+                        foreach ($request->file("tempats.{$index}.fotos") as $file) {
+                            // Store file in storage/app/public/fotos/
+                            $path = $file->store('fotos', 'public');
+
+                            $tempat->fotos()->create([
+                                'path' => $path   // e.g. "fotos/abc123.jpg"
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            // === Other simple relations ===
+            if ($request->has('konsumsis')) {
+                foreach ($request->konsumsis as $konsumsi) {
+                    $paket->konsumsis()->create([
+                        'fasilitas_konsumsi' => $konsumsi['fasilitas_konsumsi']
+                    ]);
+                }
+            }
+
+            if ($request->has('akomodasis')) {
+                foreach ($request->akomodasis as $akomodasi) {
+                    $paket->akomodasis()->create([
+                        'fasilitas_akomodasi' => $akomodasi['fasilitas_akomodasi']
+                    ]);
+                }
+            }
+
+            if ($request->has('transportasis')) {
+                foreach ($request->transportasis as $transportasi) {
+                    $paket->transportasis()->create([
+                        'fasilitas_transportasi' => $transportasi['fasilitas_transportasi']
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.paket.index')
+                ->with('success', 'Paket berhasil ditambahkan beserta foto-fotonya');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // Optional: delete uploaded files if transaction fails (advanced)
+            return redirect()->back()
+                ->withInput()
+                ->with('failed', 'Gagal menambahkan paket: ' . $e->getMessage());
+        }
     }
 
     public function show(Paket $paket)
     {
-        $paket->load(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis', 'fotos']);
+        $paket->load(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis']);
         return view('admin.paket.show', compact('paket'));
     }
 
     public function edit(Paket $paket)
     {
-        $paket->load(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis', 'fotos']);
+        $paket->load(['tempats.fotos', 'konsumsis', 'akomodasis', 'transportasis']);
         return view('admin.paket.edit', compact('paket'));
     }
 
     public function update(Request $request, Paket $paket)
     {
-        $validated = $request->validate([
-            'nama_paket' => 'required|string|max:255',
-            'harga_paket' => 'required|numeric|min:0',
+        // For now, basic update (you can extend it later with delete + re-upload logic)
+        $request->validate([
+            'nama_paket' => 'sometimes|string|max:255',
+            'harga_paket' => 'sometimes|numeric',
+            'durasi' => 'sometimes|integer',
+            'deskripsi' => 'nullable|string',
+            'pax' => 'sometimes|integer',
             'note' => 'nullable|string',
-            'fotos' => 'nullable|array',
-            'fotos.*' => 'nullable|image|max:2048',
-            'tempats' => 'nullable|array',
-            'tempats.*' => 'nullable|string|max:255',
-            'konsumsis' => 'nullable|array',
-            'konsumsis.*' => 'nullable|string|max:255',
-            'akomodasis' => 'nullable|array',
-            'akomodasis.*' => 'nullable|string|max:255',
-            'transportasis' => 'nullable|array',
-            'transportasis.*' => 'nullable|string|max:255',
         ]);
 
-        DB::transaction(function () use ($paket, $validated) {
-            $paket->update([
-                'nama_paket' => $validated['nama_paket'],
-                'harga_paket' => $validated['harga_paket'],
-                'note' => $validated['note'] ?? null,
-            ]);
-
-            $paket->konsumsis()->delete();
-            $paket->akomodasis()->delete();
-            $paket->transportasis()->delete();
-            $paket->tempats()->each(function ($tempat) {
-                $tempat->fotos()->delete();
-            });
-            $paket->tempats()->delete();
-            
-            // Delete old direct fotos
-            foreach ($paket->fotos as $foto) {
-                if ($foto->path) {
-                    Storage::disk('public')->delete($foto->path);
-                }
-            }
-            $paket->fotos()->delete();
-
-            $this->saveRelatedModels($paket, $validated);
-            $this->saveFotos($paket, $validated);
-        });
+        $paket->update($request->only([
+            'nama_paket', 'harga_paket', 'durasi', 'deskripsi', 'pax', 'note'
+        ]));
 
         return redirect()->route('admin.paket.index')
             ->with('success', 'Paket berhasil diperbarui');
@@ -124,63 +153,18 @@ class PaketController extends Controller
 
     public function destroy(Paket $paket)
     {
+        // Optional: delete all related photos from storage
+        foreach ($paket->tempats as $tempat) {
+            foreach ($tempat->fotos as $foto) {
+                if (Storage::disk('public')->exists($foto->path)) {
+                    Storage::disk('public')->delete($foto->path);
+                }
+            }
+        }
+
         $paket->delete();
 
         return redirect()->route('admin.paket.index')
             ->with('success', 'Paket berhasil dihapus');
-    }
-
-    private function saveRelatedModels(Paket $paket, array $data)
-    {
-        if (!empty($data['tempats'])) {
-            foreach (array_filter($data['tempats']) as $namaTempat) {
-                Tempat::create([
-                    'id_paket' => $paket->id,
-                    'nama_tempat' => $namaTempat,
-                ]);
-            }
-        }
-
-        if (!empty($data['konsumsis'])) {
-            foreach (array_filter($data['konsumsis']) as $fasilitas) {
-                Konsumsi::create([
-                    'id_paket' => $paket->id,
-                    'fasilitas_konsumsi' => $fasilitas,
-                ]);
-            }
-        }
-
-        if (!empty($data['akomodasis'])) {
-            foreach (array_filter($data['akomodasis']) as $fasilitas) {
-                Akomodasi::create([
-                    'id_paket' => $paket->id,
-                    'fasilitas_akomodasi' => $fasilitas,
-                ]);
-            }
-        }
-
-        if (!empty($data['transportasis'])) {
-            foreach (array_filter($data['transportasis']) as $fasilitas) {
-                Transportasi::create([
-                    'id_paket' => $paket->id,
-                    'fasilitas_transportasi' => $fasilitas,
-                ]);
-            }
-        }
-    }
-
-    private function saveFotos(Paket $paket, array $data)
-    {
-        if (!empty($data['fotos'])) {
-            foreach ($data['fotos'] as $foto) {
-                if ($foto) {
-                    $path = $foto->store('fotos', 'public');
-                    Foto::create([
-                        'id_paket' => $paket->id,
-                        'path' => $path,
-                    ]);
-                }
-            }
-        }
     }
 }
