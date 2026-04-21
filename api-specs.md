@@ -61,7 +61,7 @@ Content-Type: application/json
   "harga_paket": 25000000,
   "durasi": 9,
   "rundown": "Hari 1: Meeting Point...",
-  "note": "Termasuk机票 dan hotel",
+  "note": "Termasuk hotel",
   "tempats": [
     { "nama_tempat": "Mekkah" },
     { "nama_tempat": "Madinah" }
