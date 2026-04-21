@@ -14,7 +14,7 @@ class PaketController extends Controller
 {
     public function index()
     {
-        $pakets = Paket::with(['fasilitas'])
+        $pakets = Paket::with(['fasilitas', 'tempats.galleries'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -31,7 +31,7 @@ class PaketController extends Controller
         $request->validate([
             'nama_paket'      => 'required|string|max:255',
             'harga_paket'     => 'required|numeric',
-            'durasi'          => 'required|integer',
+            'durasi'          => 'required|string|max:255',
             'rundown'       => 'nullable|string',
             'note'            => 'nullable|string',
 
@@ -104,7 +104,7 @@ class PaketController extends Controller
         $request->validate([
             'nama_paket'      => 'required|string|max:255',
             'harga_paket'     => 'required|numeric',
-            'durasi'          => 'required|integer',
+            'durasi'          => 'required|string|max:255',
             'rundown'       => 'nullable|string',
             'note'            => 'nullable|string',
 

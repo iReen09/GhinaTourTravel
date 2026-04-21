@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\CompanyProfileController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\PaketController;
+use App\Http\Controllers\Admin\PesananController;
 use App\Http\Controllers\Chatbot\ChatbotController;
 use App\Http\Controllers\Customer\PageController;
 use Illuminate\Support\Facades\Route;
@@ -26,9 +28,11 @@ Route::get('/photos', [PageController::class, 'photos'])->name('photos');
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('paket', PaketController::class);
     Route::resource('gallery', GalleryController::class);
+    Route::resource('pesanan', PesananController::class);
     Route::resource('company-profile', CompanyProfileController::class)->only([
         'show', 'edit', 'update'
     ]);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
 });
 
 /*

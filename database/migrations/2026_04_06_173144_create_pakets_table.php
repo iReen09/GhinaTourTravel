@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('nama_paket');
             $table->decimal('harga_paket', 15, 2);
-            $table->integer('durasi')->default(1);
+            $table->string('durasi')->nullable();
             $table->text('rundown');
             $table->text('note')->nullable();
         });

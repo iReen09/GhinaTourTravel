@@ -4,125 +4,505 @@
 @section('header', 'Kelola Paket Tour')
 
 @section('content')
-<div class="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-800">
-    <div class="p-4 lg:p-6 border-b border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <style>
+        *,
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ── CSS Variables ── */
+        :root {
+            --gold: #D4A017;
+            --gold-dark: #b8860b;
+            --gold-light: #f0c94d;
+            --orange: #FF9357;
+        }
+
+        [data-theme="light"] {
+            --bg: #F2F3F7;
+            --bg-card: #FFFFFF;
+            --text: #1a1a1a;
+            --text-muted: #6b7280;
+            --border: #E5E7EB;
+            --table-head: #F9FAFB;
+            --table-border: #F3F4F6;
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, .06);
+            --sidebar-active-bg: #FFF4EB;
+            --sidebar-active-text: #D4A017;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f1117;
+            --bg-card: #1e2130;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #2d3348;
+            --table-head: #1a1f2e;
+            --table-border: #2a3045;
+            --shadow-card: 0 2px 12px rgba(0, 0, 0, .3);
+            --sidebar-active-bg: rgba(212, 160, 23, .12);
+            --sidebar-active-text: #f0c94d;
+        }
+
+        /* ── Card ── */
+        .adm-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        /* ── Table ── */
+        .adm-tbl {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .adm-tbl thead th {
+            background: var(--table-head);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            padding: 13px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--table-border);
+        }
+
+        .adm-tbl tbody td {
+            padding: 14px 18px;
+            font-size: 14px;
+            color: var(--text);
+            border-bottom: 1px solid var(--table-border);
+        }
+
+        .adm-tbl tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .adm-tbl tbody tr:hover {
+            background: var(--sidebar-active-bg);
+        }
+
+        /* ── Buttons ── */
+        .btn-orange {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--orange);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 9px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            transition: background .2s;
+            text-decoration: none;
+        }
+
+        .btn-orange:hover {
+            background: #e07c3d;
+        }
+
+        .btn-view {
+            background: transparent;
+            color: #8b5cf6;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: background .15s;
+        }
+
+        .btn-view:hover {
+            background: rgba(139, 92, 246, .1);
+        }
+
+        .btn-edit {
+            background: transparent;
+            color: var(--gold);
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: background .15s;
+        }
+
+        .btn-edit:hover {
+            background: rgba(212, 160, 23, .12);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: #ef4444;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: background .15s;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, .1);
+        }
+
+        /* ── Badge durasi ── */
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge-day {
+            background: #FFF4EB;
+            color: var(--orange);
+        }
+
+        .badge-inap {
+            background: #EFF6FF;
+            color: #2563eb;
+        }
+
+        [data-theme="dark"] .badge-day {
+            background: rgba(255, 147, 87, .15);
+            color: #ff9357;
+        }
+
+        [data-theme="dark"] .badge-inap {
+            background: rgba(37, 99, 235, .15);
+            color: #60a5fa;
+        }
+
+        /* ── Thumbnail destinasi ── */
+        .dest-thumb {
+            width: 44px;
+            height: 34px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5e7eb;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .dest-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ── Komponen badge ── */
+        .komp-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ── Pagination ── */
+        .pg-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .pg-info {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+    </style>
+    {{-- Heading & Tombol Tambah --}}
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:12px;">
         <div>
-            <h3 class="text-lg font-semibold">Daftar Paket Tour</h3>
-            <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">Kelola semua paket tour yang tersedia</p>
+            <h1 style="font-size:24px;font-weight:700;color:var(--text);margin:0;">Kelola Paket Tour</h1>
+            <p style="font-size:13px;color:var(--text-muted);margin:4px 0 0;">Kelola semua paket tour yang tersedia</p>
         </div>
-        <a href="{{ route('admin.paket.create') }}" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        <a href="{{ route('admin.paket.create') }}" class="btn-orange">
+            <svg style="width:15px;height:15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
             </svg>
             Tambah Paket
         </a>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full">
-            <thead class="bg-neutral-50 dark:bg-neutral-800/50">
-                <tr>
-                    <th class="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">No</th>
-                    <th class="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Nama Paket</th>
-                    <th class="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Harga</th>
-                    <th class="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Komponen</th>
-                    <th class="px-4 lg:px-6 py-3 text-right text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-neutral-200 dark:divide-neutral-800">
-                @forelse($pakets as $index => $paket)
-                <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
-                    <td class="px-4 lg:px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
-                        {{ $pakets->firstItem() + $index }}
-                    </td>
-                    <td class="px-4 lg:px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ $paket->nama_paket }}</p>
-                                <p class="text-xs text-neutral-500 dark:text-neutral-400 truncate max-w-xs">{{ Str::limit($paket->note, 30) }}</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-4 lg:px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600 dark:text-green-400">
-                        Rp {{ number_format($paket->harga_paket, 0, ',', '.') }}
-                    </td>
-                    <td class="px-4 lg:px-6 py-4">
-                        <div class="flex flex-wrap gap-1.5">
-                            @if($paket->tempats->count() > 0)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
-                                    {{ $paket->tempats->count() }} Tempat
+    <div class="adm-card">
+        <div class="overflow-x-auto">
+            <table class="adm-tbl">
+                <thead>
+                    <tr>
+                        <th style="width:50px;">No</th>
+                        <th>Nama Paket</th>
+                        <th>Durasi</th>
+                        <th>Harga / Pax</th>
+                        <th>Komponen</th>
+                        <th style="width:120px;text-align:center;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($pakets as $index => $paket)
+                        <tr>
+                            <td style="color:var(--text-muted);font-size:13px;">
+                                {{ $pakets->firstItem() + $index }}
+                            </td>
+
+                            {{-- Nama Paket + Note --}}
+                            <td>
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    {{--
+                                        Thumbnail: ambil dari galleries milik tempat pertama paket ini.
+                                        tempats = hasMany → ambil ->first() dulu, lalu cek galleries-nya.
+                                        Perlu eager load: Paket::with(['fasilitas', 'tempats.galleries'])
+                                    --}}
+                                    @php
+                                        $firstTempat = $paket->tempats->first();
+                                        $firstGallery = $firstTempat?->galleries?->first();
+                                    @endphp
+
+                                    @if ($firstGallery)
+                                        <div class="dest-thumb">
+                                            <img src="{{ asset('storage/' . $firstGallery->path) }}"
+                                                alt="{{ $paket->nama_paket }}" />
+                                        </div>
+                                    @else
+                                        <div class="dest-thumb" style="background:linear-gradient(135deg,#FFF4EB,#fde68a);">
+                                            <svg style="width:18px;height:18px;color:var(--orange);" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                            </svg>
+                                        </div>
+                                    @endif
+
+                                    <div>
+                                        <p style="font-weight:600;font-size:14px;color:var(--text);margin:0;">
+                                            {{ $paket->nama_paket }}
+                                        </p>
+                                        <p style="font-size:12px;color:var(--text-muted);margin:2px 0 0;
+                                            max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                            {{ Str::limit($paket->note, 40) }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+
+                            {{-- Badge Durasi --}}
+                            <td>
+                                @php
+                                    $isInap = str_contains(strtolower($paket->durasi ?? ''), 'malam');
+                                @endphp
+                                <span class="badge {{ $isInap ? 'badge-inap' : 'badge-day' }}">
+                                    {{ $paket->durasi ?? '-' }}
                                 </span>
-                            @endif
-                            @if($paket->konsumsis->count() > 0)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                    {{ $paket->konsumsis->count() }} Konsumsi
-                                </span>
-                            @endif
-                            @if($paket->akomodasis->count() > 0)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
-                                    {{ $paket->akomodasis->count() }} Akomodasi
-                                </span>
-                            @endif
-                            @if($paket->transportasis->count() > 0)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
-                                    {{ $paket->transportasis->count() }} Transport
-                                </span>
-                            @endif
-                        </div>
-                    </td>
-                    <td class="px-4 lg:px-6 py-4 whitespace-nowrap text-right">
-                        <div class="flex items-center justify-end gap-1">
-                            <a href="{{ route('admin.paket.show', $paket->id) }}" class="p-2 rounded-lg text-neutral-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Lihat">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                </svg>
-                            </a>
-                            <a href="{{ route('admin.paket.edit', $paket->id) }}" class="p-2 rounded-lg text-neutral-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors" title="Edit">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                </svg>
-                            </a>
-                            <form action="{{ route('admin.paket.destroy', $paket->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus paket ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="p-2 rounded-lg text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" class="px-6 py-12 text-center">
-                        <div class="flex flex-col items-center">
-                            <div class="w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
-                                <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                                </svg>
-                            </div>
-                            <p class="text-neutral-500 dark:text-neutral-400 font-medium">Belum ada paket tour</p>
-                            <p class="text-sm text-neutral-400 dark:text-neutral-500 mt-1">Tambahkan paket tour pertama Anda</p>
-                        </div>
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+                            </td>
+
+                            {{-- Harga --}}
+                            <td style="font-weight:600;color:var(--orange);">
+                                Rp {{ number_format($paket->harga_paket, 0, ',', '.') }}
+                            </td>
+
+                            {{--
+                                Komponen: semua berasal dari tabel fasilitas (kolom tipe_fasilitas).
+                                Tidak ada tabel konsumsi/akomodasi/transportasi terpisah.
+                                Group fasilitas berdasarkan tipe_fasilitas.
+                            --}}
+                            <td>
+                                <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                                    @php
+                                        $fasilitasGroup = $paket->fasilitas->groupBy('tipe_fasilitas');
+                                        $tipeStyle = [
+                                            'tempat'       => ['bg' => '#EFF6FF', 'color' => '#2563eb'],
+                                            'konsumsi'     => ['bg' => '#F0FDF4', 'color' => '#16a34a'],
+                                            'akomodasi'    => ['bg' => '#FAF5FF', 'color' => '#7c3aed'],
+                                            'transportasi' => ['bg' => '#FFF4EB', 'color' => 'var(--orange)'],
+                                        ];
+                                    @endphp
+
+                                    {{-- Badge tempat dari relasi tempats --}}
+                                    @if ($paket->tempats->count() > 0)
+                                        <span class="komp-badge" style="background:#EFF6FF;color:#2563eb;">
+                                            {{ $paket->tempats->count() }} Tempat
+                                        </span>
+                                    @endif
+
+                                    {{-- Badge per tipe_fasilitas --}}
+                                    @forelse ($fasilitasGroup as $tipe => $items)
+                                        @php
+                                            $style = $tipeStyle[strtolower($tipe)] ?? ['bg' => '#F3F4F6', 'color' => '#6b7280'];
+                                        @endphp
+                                        <span class="komp-badge"
+                                            style="background:{{ $style['bg'] }};color:{{ $style['color'] }};">
+                                            {{ $items->count() }} {{ ucfirst($tipe) }}
+                                        </span>
+                                    @empty
+                                    @endforelse
+
+                                    @if ($paket->tempats->count() === 0 && $paket->fasilitas->count() === 0)
+                                        <span style="font-size:12px;color:var(--text-muted);">—</span>
+                                    @endif
+                                </div>
+                            </td>
+
+                            {{-- Aksi --}}
+                            <td style="text-align:center;">
+                                <div style="display:inline-flex;align-items:center;gap:2px;">
+                                    <a href="{{ route('admin.paket.show', $paket->id) }}" class="btn-view" title="Lihat Detail">
+                                        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </a>
+
+                                    <a href="{{ route('admin.paket.edit', $paket->id) }}" class="btn-edit" title="Edit">
+                                        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </a>
+
+                                    <form action="{{ route('admin.paket.destroy', $paket->id) }}" method="POST"
+                                        class="inline" onsubmit="return confirmHapus(event, '{{ $paket->nama_paket }}')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-danger" title="Hapus">
+                                            <svg style="width:16px;height:16px;" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" style="padding:60px 20px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+                                    <div style="width:60px;height:60px;border-radius:50%;background:var(--table-head);
+                                        display:flex;align-items:center;justify-content:center;">
+                                        <svg style="width:28px;height:28px;color:var(--text-muted);" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                        </svg>
+                                    </div>
+                                    <p style="font-weight:600;color:var(--text);margin:0;">Belum ada paket tour</p>
+                                    <p style="font-size:13px;color:var(--text-muted);margin:0;">Tambahkan paket tour pertama Anda</p>
+                                    <a href="{{ route('admin.paket.create') }}" class="btn-orange" style="margin-top:4px;">
+                                        <svg style="width:14px;height:14px;" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" stroke-width="2.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Tambah Sekarang
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if ($pakets->hasPages())
+            <div class="pg-wrap" style="border-top:1px solid var(--border);">
+                <p class="pg-info">
+                    Menampilkan {{ $pakets->firstItem() }}–{{ $pakets->lastItem() }}
+                    dari {{ $pakets->total() }} paket
+                </p>
+                <div>{{ $pakets->links() }}</div>
+            </div>
+        @else
+            <div class="pg-wrap" style="border-top:1px solid var(--border);">
+                <p class="pg-info">Total {{ $pakets->total() }} paket</p>
+            </div>
+        @endif
     </div>
 
-    @if($pakets->hasPages())
-    <div class="px-4 lg:px-6 py-4 border-t border-neutral-200 dark:border-neutral-800">
-        {{ $pakets->links() }}
+    {{-- Modal hapus (tidak berubah) --}}
+        <div id="deleteModal"
+        style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+            z-index:999;align-items:center;justify-content:center;">
+        <div
+            style="background:var(--bg-card);border-radius:16px;padding:28px;
+              max-width:440px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);
+              border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+                <div
+                    style="width:46px;height:46px;border-radius:50%;background:#FEE2E2;
+                  display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg style="width:22px;height:22px;color:#ef4444;" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858
+                                           L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 style="font-size:16px;font-weight:700;color:var(--text);margin:0 0 4px;">
+                        Hapus Paket?
+                    </h3>
+                    <p id="deleteModalName" style="font-size:13px;color:var(--text-muted);margin:0;">
+                        Paket ini akan dihapus permanen.
+                    </p>
+                </div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button onclick="closeDeleteModal()"
+                    style="padding:9px 20px;border-radius:8px;border:1px solid var(--border);
+                     background:transparent;color:var(--text-muted);font-weight:600;
+                     font-size:13px;cursor:pointer;">
+                    Batal
+                </button>
+                <button id="confirmDeleteBtn"
+                    style="padding:9px 20px;border-radius:8px;background:#ef4444;
+                     color:#fff;font-weight:600;font-size:13px;border:none;cursor:pointer;">
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
     </div>
-    @endif
-</div>
+
+    <script>
+        // ── Modal hapus — intercept form submit, tampilkan modal dulu ──────────
+        let _pendingForm = null;
+
+        function confirmHapus(e, nama) {
+            e.preventDefault();
+            _pendingForm = e.target;
+            document.getElementById('deleteModalName').textContent =
+                '"' + nama + '" akan dihapus secara permanen.';
+            const modal = document.getElementById('deleteModal');
+            modal.style.display = 'flex';
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            if (_pendingForm) _pendingForm.submit();
+        });
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            _pendingForm = null;
+        }
+
+        // Klik backdrop → tutup
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDeleteModal();
+        });
+    </script>
+
 @endsection
+
