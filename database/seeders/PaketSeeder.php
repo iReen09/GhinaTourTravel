@@ -7,228 +7,411 @@ use Illuminate\Support\Facades\DB;
 
 class PaketSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        /*
-        =========================================
-        PAKET 1 - JOGJA ONE DAY
-        =========================================
-        */
-        $paket1 = DB::table('pakets')->insertGetId([
-            'nama_paket' => 'Jogja One Day',
-            'harga_paket' => 350000,
-            'pax' => 50,
-            'note' => 'Harga dapat berubah sewaktu-waktu',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        $tempat1 = [
-            'Keraton',
-            'Taman Sari',
-            'Parangtritis',
-            'Malioboro'
+        $pakets = [
+            [
+                'nama_paket' => 'Pantai & Alam Yogyakarta One Day',
+                'harga_paket' => 350000.00,
+                'durasi' => '1 Hari',
+                'rundown' => 'Perjalanan wisata satu hari mengunjungi Pantai Pandansari, Gumuk Pasir Parangkusumo, Pinus Pengger, dan Marlioboro.',
+                'note' => 'Harga untuk 50 PAX. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Pantai Pandansari',
+                    'Gumuk Pasir Parangkusumo',
+                    'Pinus Pengger',
+                    'Marlioboro',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan 2x'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral 330 ml'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Jogja Inap (Outbound, Gua Pindul, Merapi)',
+                'harga_paket' => 700000.00,
+                'durasi' => '2 Hari 1 Malam',
+                'rundown' => 'Perjalanan wisata menginap ke Yogyakarta dengan kegiatan Outbound di Pantai, Jeep Merapi, Gua Pindul, dan Marlioboro.',
+                'note' => 'Harga untuk SEAT 50. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Outbound di Pantai',
+                    'Jeep Merapi',
+                    'Gua Pindul',
+                    'Marlioboro',
+                    'Hotel Yogyakarta',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Jogja Inap (Ibarbo, Jeep, Marlioboro)',
+                'harga_paket' => 750000.00,
+                'durasi' => '2 Hari 1 Malam',
+                'rundown' => 'Perjalanan wisata menginap ke Yogyakarta mengunjungi Ibarbo Aviary, kawasan Malioboro, wahana Jeep, dan berbagai destinasi menarik.',
+                'note' => 'Harga untuk SEAT 50. Termasuk kaos per peserta dan doorprize. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Ibarbo Aviary',
+                    'Kawasan Marlioboro',
+                    'Jeep Adventure',
+                    'Hotel Yogyakarta',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Kaos Per Peserta'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Doorprize'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Dewata Bali',
+                'harga_paket' => 1900000.00,
+                'durasi' => '3 Hari 2 Malam',
+                'rundown' => 'Paket wisata ke Bali (Dewata Bali) selama 3 hari 2 malam, mengunjungi berbagai destinasi wisata budaya dan alam di Pulau Bali.',
+                'note' => 'Harga untuk 50 PAX. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Destinasi Wisata Budaya Bali',
+                    'Destinasi Wisata Alam Bali',
+                    'Hotel Bali (2 Malam)',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Hotel 2 Malam'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Batu Malang Inap',
+                'harga_paket' => 1500000.00,
+                'durasi' => '2 Hari 1 Malam',
+                'rundown' => 'Perjalanan wisata ke Batu Malang Jawa Timur, mengunjungi Jatim Park 1, Wonderland, Museum Angkut, dan De Laponte dengan menginap 1 malam.',
+                'note' => 'Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Jatim Park 1',
+                    'Wonderland',
+                    'Museum Angkut',
+                    'De Laponte',
+                    'Hotel Batu Malang (1 Malam)',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Hotel 1 Malam'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral 330 ml'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Bandung One Day',
+                'harga_paket' => 600000.00,
+                'durasi' => '1 Hari',
+                'rundown' => 'Paket wisata satu hari ke Bandung mengunjungi Farm House, Floating Market, The Great Asia Afrika, dan Pasar Baru.',
+                'note' => 'Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Farm House Bandung',
+                    'Floating Market Lembang',
+                    'The Great Asia Afrika',
+                    'Pasar Baru Bandung',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Bandung Jakarta Inap 1 Malam',
+                'harga_paket' => 1400000.00,
+                'durasi' => '2 Hari 1 Malam',
+                'rundown' => 'Paket wisata Bandung-Jakarta dengan menginap 1 malam, mengunjungi berbagai destinasi wisata di Bandung dan Jakarta.',
+                'note' => 'Harga untuk 46 PAX. Termasuk kaos. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Destinasi Wisata Bandung',
+                    'Destinasi Wisata Jakarta',
+                    'Hotel (1 Malam)',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Kaos'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Hotel'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Jakarta Bandung Inap 2 Malam',
+                'harga_paket' => 1470000.00,
+                'durasi' => '3 Hari 2 Malam',
+                'rundown' => 'Paket wisata Jakarta-Bandung dengan menginap 2 malam, mengunjungi berbagai destinasi ikonik di Jakarta dan Bandung.',
+                'note' => 'Termasuk kaos. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Monumen Nasional (Monas)',
+                    'Dunia Fantasi (Dufan)',
+                    'Destinasi Wisata Jakarta Lainnya',
+                    'Destinasi Wisata Bandung',
+                    'Hotel (2 Malam)',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Kaos'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Hotel'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Jogjakarta One Day',
+                'harga_paket' => 350000.00,
+                'durasi' => '1 Hari',
+                'rundown' => 'Paket wisata satu hari ke Yogyakarta mengunjungi Keraton, Taman Sari, Pantai Parangtritis, dan Marlioboro.',
+                'note' => 'Harga untuk 50 PAX. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Keraton Yogyakarta',
+                    'Taman Sari',
+                    'Pantai Parangtritis',
+                    'Marlioboro',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Paket Wisata Semarang 1',
+                'harga_paket' => 500000.00,
+                'durasi' => '1 Hari',
+                'rundown' => 'Paket wisata satu hari ke Semarang mengunjungi Lawang Sewu, Kota Lama Semarang, Sam Po Kong, dan Masjid Agung Semarang.',
+                'note' => 'Harga untuk 50 PAX. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Lawang Sewu',
+                    'Kota Lama Semarang',
+                    'Sam Po Kong',
+                    'Masjid Agung Semarang',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Bus Pariwisata'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral 600 ml'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Karimunjawa 3D2N Homestay Kipas',
+                'harga_paket' => 1850000.00,
+                'durasi' => '3 Hari 2 Malam',
+                'rundown' => 'Paket wisata 3 hari 2 malam ke Karimunjawa via Jepara (Weekday) dengan menginap di Homestay Kipas, termasuk tour laut dan darat.',
+                'note' => 'Harga untuk 30 PAX. Weekday. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Karimunjawa',
+                    'Tour Laut Karimunjawa',
+                    'Tour Darat Karimunjawa',
+                    'Homestay Kipas',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Tiket Kapal Ekspres PP'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Transportasi Selama di Lokasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Guide'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Dokumentasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Destinasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Homestay Kipas (2 Malam)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan Selama Tour'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Karimunjawa 3D2N Homestay AC',
+                'harga_paket' => 2100000.00,
+                'durasi' => '3 Hari 2 Malam',
+                'rundown' => 'Paket wisata 3 hari 2 malam ke Karimunjawa via Jepara (Weekday) dengan menginap di Homestay ber-AC, termasuk tour laut dan darat.',
+                'note' => 'Harga untuk 30 PAX. Weekday. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Karimunjawa',
+                    'Tour Laut Karimunjawa',
+                    'Tour Darat Karimunjawa',
+                    'Homestay AC',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Tiket Kapal Ekspres PP'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Transportasi Selama di Lokasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Guide'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Dokumentasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Destinasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Homestay AC (2 Malam)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan Selama Tour'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Karimunjawa 3D2N Hotel/Resort',
+                'harga_paket' => 2350000.00,
+                'durasi' => '3 Hari 2 Malam',
+                'rundown' => 'Paket wisata 3 hari 2 malam ke Karimunjawa via Jepara (Weekday) dengan menginap di Hotel/Resort, termasuk tour laut dan darat.',
+                'note' => 'Harga untuk 30 PAX. Weekday. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Karimunjawa',
+                    'Tour Laut Karimunjawa',
+                    'Tour Darat Karimunjawa',
+                    'Hotel/Resort Karimunjawa',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Tiket Kapal Ekspres PP'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Transportasi Selama di Lokasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Guide'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Dokumentasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Destinasi'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Hotel/Resort (2 Malam)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan Selama Tour'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Outbound Baturaden',
+                'harga_paket' => 100000.00,
+                'durasi' => '1 Hari',
+                'rundown' => 'Kegiatan Outbound Fun Game & Game Challenge (komunikasi, tantangan, leadership) untuk Siswa SMP di Baturaden Curug Bayan Ketenger.',
+                'note' => 'Harga untuk 100 siswa. Peserta: Siswa SMP.',
+                'tempats' => [
+                    'Baturaden',
+                    'Curug Bayan Ketenger',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'Mobil Dalmas'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Trainer / Fasilitator'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'HTM (Tiket Masuk)'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Kegiatan'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Parkir dll'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan 1x'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack 1x'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral 600 ml 1x'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral Selama Kegiatan'],
+                ],
+            ],
+            [
+                'nama_paket' => 'Trip Dieng One Day',
+                'harga_paket' => 425000.00,
+                'durasi' => '1 Hari',
+                'rundown' => 'Paket wisata satu hari ke Dieng, mengunjungi Telaga Warna, Candi Dieng, dan berbagai destinasi wisata alam di kawasan Dataran Tinggi Dieng.',
+                'note' => 'Harga untuk 20 PAX. Harga sewaktu-waktu bisa berubah.',
+                'tempats' => [
+                    'Telaga Warna Dieng',
+                    'Candi Dieng',
+                    'Kawasan Dataran Tinggi Dieng',
+                ],
+                'fasilitas' => [
+                    ['tipe' => 'Transportasi', 'nama' => 'ELF'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Air Conditioner & Audio'],
+                    ['tipe' => 'Transportasi', 'nama' => 'Reclining Seat'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tour Leader'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Tiket Masuk Obyek Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'P3K + Asuransi Wisata'],
+                    ['tipe' => 'Akomodasi', 'nama' => 'Retribusi Perjalanan (Tol, Parkir, dll)'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Makan sesuai Program'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Snack'],
+                    ['tipe' => 'Konsumsi', 'nama' => 'Air Mineral 330 ml selama perjalanan'],
+                ],
+            ],
         ];
 
-        foreach ($tempat1 as $t) {
-            DB::table('tempats')->insert([
-                'nama_tempat' => $t,
-                'id_paket' => $paket1,
-                'created_at' => now(),
-                'updated_at' => now()
+        foreach ($pakets as $paketData) {
+            $paketId = DB::table('pakets')->insertGetId([
+                'nama_paket'  => $paketData['nama_paket'],
+                'harga_paket' => $paketData['harga_paket'],
+                'durasi'      => $paketData['durasi'],
+                'rundown'     => $paketData['rundown'],
+                'note'        => $paketData['note'],
+                'created_at'  => now(),
+                'updated_at'  => now(),
             ]);
+
+            foreach ($paketData['tempats'] as $namaTempat) {
+                DB::table('tempats')->insert([
+                    'nama_tempat' => $namaTempat,
+                    'id_paket'    => $paketId,
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
+                ]);
+            }
+
+            foreach ($paketData['fasilitas'] as $fasilitas) {
+                DB::table('fasilitas')->insert([
+                    'tipe_fasilitas' => $fasilitas['tipe'],
+                    'nama_fasilitas' => $fasilitas['nama'],
+                    'id_paket'       => $paketId,
+                    'created_at'     => now(),
+                    'updated_at'     => now(),
+                ]);
+            }
         }
-
-        // Transportasi
-        DB::table('transportasis')->insert([
-            ['fasilitas_transportasi' => 'Bus Pariwisata', 'id_paket' => $paket1],
-            ['fasilitas_transportasi' => 'AC & Audio', 'id_paket' => $paket1],
-            ['fasilitas_transportasi' => 'Reclining Seat', 'id_paket' => $paket1],
-        ]);
-
-        // Akomodasi
-        DB::table('akomodasis')->insert([
-            ['fasilitas_akomodasi' => 'Tour Leader', 'id_paket' => $paket1],
-            ['fasilitas_akomodasi' => 'Tiket Masuk Wisata', 'id_paket' => $paket1],
-            ['fasilitas_akomodasi' => 'Asuransi Wisata', 'id_paket' => $paket1],
-            ['fasilitas_akomodasi' => 'Tol & Parkir', 'id_paket' => $paket1],
-        ]);
-
-        // Konsumsi
-        DB::table('konsumsis')->insert([
-            ['fasilitas_konsumsi' => 'Makan sesuai program', 'id_paket' => $paket1],
-            ['fasilitas_konsumsi' => 'Snack', 'id_paket' => $paket1],
-            ['fasilitas_konsumsi' => 'Air Mineral', 'id_paket' => $paket1],
-        ]);
-
-        /*
-        =========================================
-        PAKET 2 - JOGJA INAP
-        =========================================
-        */
-        $paket2 = DB::table('pakets')->insertGetId([
-            'nama_paket' => 'Jogja Inap',
-            'harga_paket' => 700000,
-            'pax' => 50,
-            'note' => 'Termasuk hotel',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        $tempat2 = [
-            'Pantai',
-            'Jeep Merapi',
-            'Goa Pindul',
-            'Malioboro'
-        ];
-
-        foreach ($tempat2 as $t) {
-            DB::table('tempats')->insert([
-                'nama_tempat' => $t,
-                'id_paket' => $paket2,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-        }
-
-        DB::table('akomodasis')->insert([
-            ['fasilitas_akomodasi' => 'Hotel', 'id_paket' => $paket2],
-            ['fasilitas_akomodasi' => 'Tour Leader', 'id_paket' => $paket2],
-        ]);
-
-        /*
-        =========================================
-        PAKET 3 - BALI (DEWATA)
-        =========================================
-        */
-        $paket3 = DB::table('pakets')->insertGetId([
-            'nama_paket' => 'Dewata Bali',
-            'harga_paket' => 1900000,
-            'pax' => 50,
-            'note' => 'Hotel 2 malam',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        DB::table('akomodasis')->insert([
-            ['fasilitas_akomodasi' => 'Hotel 2 Malam', 'id_paket' => $paket3],
-        ]);
-
-        /*
-        =========================================
-        PAKET 4 - BATU MALANG
-        =========================================
-        */
-        $paket4 = DB::table('pakets')->insertGetId([
-            'nama_paket' => 'Batu Malang Inap',
-            'harga_paket' => 1500000,
-            'pax' => null,
-            'note' => 'Hotel 1 malam',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        $tempat4 = [
-            'Jatim Park 1',
-            'Museum Angkut',
-            'De Laponte'
-        ];
-
-        foreach ($tempat4 as $t) {
-            DB::table('tempats')->insert([
-                'nama_tempat' => $t,
-                'id_paket' => $paket4,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-        }
-
-        /*
-        =========================================
-        PAKET 5 - BANDUNG ONE DAY
-        =========================================
-        */
-        $paket5 = DB::table('pakets')->insertGetId([
-            'nama_paket' => 'Bandung One Day',
-            'harga_paket' => 600000,
-            'pax' => null,
-            'note' => null,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        $tempat5 = [
-            'Farm House',
-            'Floating Market',
-            'Great Asia Afrika',
-            'Pasar Baru'
-        ];
-
-        foreach ($tempat5 as $t) {
-            DB::table('tempats')->insert([
-                'nama_tempat' => $t,
-                'id_paket' => $paket5,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-        }
-
-        /*
-        =========================================
-        PAKET 6 - SEMARANG
-        =========================================
-        */
-        $paket6 = DB::table('pakets')->insertGetId([
-            'nama_paket' => 'Semarang Tour',
-            'harga_paket' => 500000,
-            'pax' => 50,
-            'note' => null,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        $tempat6 = [
-            'Lawang Sewu',
-            'Kota Lama',
-            'Sam Poo Kong',
-            'Masjid Agung'
-        ];
-
-        foreach ($tempat6 as $t) {
-            DB::table('tempats')->insert([
-                'nama_tempat' => $t,
-                'id_paket' => $paket6,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-        }
-
-        /*
-        =========================================
-        PAKET 7 - DIENG
-        =========================================
-        */
-        $paket7 = DB::table('pakets')->insertGetId([
-            'nama_paket' => 'Dieng One Day',
-            'harga_paket' => 425000,
-            'pax' => 20,
-            'note' => null,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        /*
-        =========================================
-        PAKET 8 - OUTBOUND
-        =========================================
-        */
-        $paket8 = DB::table('pakets')->insertGetId([
-            'nama_paket' => 'Outbound',
-            'harga_paket' => 100000,
-            'pax' => 100,
-            'note' => 'Fun game & leadership',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
     }
 }
