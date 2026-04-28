@@ -1,0 +1,5 @@
+buatkan github issue(issue.md) pada remote backup(https://github.com/iReen09/GhinaTourTravel) berisi planning membuat ini :
+
+1. ubah tabel pada menu dashboard admin, ganti field jumlah orang menjadi pax seperti pada tabel pesanan
+2. total harga pada tabel pesanan salah, harusnya subtotal * jumlah orang, samakan perhitungannya dengan harga subtotal yang ada pada invoice
+3. sesuaikan ukuran logo pada form login admin dengan card nya(masih terlalu besar)

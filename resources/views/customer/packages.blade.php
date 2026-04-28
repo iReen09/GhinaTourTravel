@@ -119,7 +119,8 @@
                                 </div>
                             </div>
                             @if ($paket->fotos && $paket->fotos->count() > 0)
-                                <img src="{{ asset('storage/' . $paket->fotos->first()->path) }}"
+                                @php $firstFoto = $paket->fotos->first(); @endphp
+                                <img src="{{ Str::startsWith($firstFoto->path, 'http') ? $firstFoto->path : asset('storage/' . $firstFoto->path) }}"
                                     alt="{{ $paket->nama_paket }}" class="absolute inset-0 w-full h-full object-cover" />
                             @else
                                 <div class="h-full w-full" style="background:linear-gradient(135deg,#7c3f00,#c97a1a);">

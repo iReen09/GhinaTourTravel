@@ -205,7 +205,8 @@
                                 </div>
                             </div>
                             @if ($paket->fotos && $paket->fotos->count() > 0)
-                                <img src="{{ asset('storage/' . $paket->fotos->first()->path) }}"
+                                @php $firstFoto = $paket->fotos->first(); @endphp
+                                <img src="{{ Str::startsWith($firstFoto->path, 'http') ? $firstFoto->path : asset('storage/' . $firstFoto->path) }}"
                                     alt="{{ $paket->nama_paket }}" class="h-full w-full object-cover" />
                             @else
                                 <div class="h-full w-full" style="background:linear-gradient(135deg,#7c3f00,#c97a1a);">
@@ -242,7 +243,7 @@
                 <div class="galeri-item h-[185px] flex items-center justify-center flex-col gap-1 text-white/60 relative"
                     style="@if ($index % 5 == 0) background:linear-gradient(135deg,#7c3f00,#c97a1a); @elseif($index % 5 == 1) background:linear-gradient(135deg,#1e3a8a,#0369a1); @elseif($index % 5 == 2) background:linear-gradient(135deg,#78350f,#d97706); @elseif($index % 5 == 3) background:linear-gradient(135deg,#134e4a,#0d9488); @else background:linear-gradient(135deg,#3b0764,#6d28d9); @endif">
                     @if ($foto->path)
-                        <img src="{{ asset('storage/' . $foto->path) }}" alt="{{ $foto->keterangan ?? 'Galeri' }}"
+                        <img src="{{ Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path) }}" alt="{{ $foto->keterangan ?? 'Galeri' }}"
                             class="absolute inset-0 w-full h-full object-cover" />
                     @else
                         <svg class="w-8 h-8 text-white/30" fill="currentColor" viewBox="0 0 24 24">

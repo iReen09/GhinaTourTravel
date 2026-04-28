@@ -25,5 +25,10 @@ class Paket extends Model
         return $this->hasMany(Fasilitas::class, 'id_paket');
     }
 
+    public function fotos()
+    {
+        return $this->hasManyThrough(Gallery::class, Tempat::class, 'id_paket', 'id_tempat');
+    }
+
 
 }

@@ -85,8 +85,8 @@
                     <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
                         Pax <span class="text-red-500">*</span>
                     </label>
-                    <input type="number" name="jumlah_orang" id="jumlah_pax"
-                        value="{{ old('jumlah_orang', $id->jumlah_pax) }}" required min="1"
+                    <input type="number" name="jumlah_orang" id="jumlah_orang"
+                        value="{{ old('jumlah_orang', $id->jumlah_orang) }}" required min="1"
                         class="w-full px-4 py-2.5 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-amber-500 transition-colors"
                         oninput="hitungTotal()">
                     @error('jumlah_orang')

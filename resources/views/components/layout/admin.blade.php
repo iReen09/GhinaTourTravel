@@ -41,13 +41,6 @@
             <div class="flex flex-col h-full">
 
                 <div class="flex items-center gap-3 px-6 h-16 border-b border-neutral-200 dark:border-neutral-800">
-                    <div
-                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
                     <div>
                         <h1 class="font-semibold text-sm">Ghina Tour</h1>
                         <p class="text-xs text-neutral-500 dark:text-neutral-400">Admin Panel</p>
@@ -147,16 +140,15 @@
                     <div class="relative">
                         <button onclick="toggleLogoutMenu()"
                             class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus:outline-none">
-                            <div
-                                class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold text-sm select-none">
-                                {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                            <div class="w-8 h-8 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border border-neutral-200 dark:border-neutral-700">
+                                <img src="{{ asset('customer/assets/images/logos/logo.png') }}" class="w-full h-full object-cover" alt="Admin">
                             </div>
                             <div class="hidden sm:block text-left leading-tight">
                                 <p class="text-sm font-semibold">{{ auth()->user()->name ?? 'Admin' }}</p>
                                 <p class="text-xs text-neutral-400">Administrator</p>
                             </div>
-                            <svg class="w-4 h-4 text-neutral-400 hidden sm:block" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-neutral-400 hidden sm:block" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 9l-7 7-7-7" />
                             </svg>

@@ -246,13 +246,9 @@
         {{-- Brand --}}
         <div class="brand"><span>Ghina</span> Tour Travel</div>
 
-        {{-- Shield icon --}}
+        {{-- Logo icon --}}
         <div class="icon-wrap">
-            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#FBF5E6" stroke="#B8952A"
-                    stroke-width="1.8" />
-                <circle cx="12" cy="12" r="3" fill="#B8952A" />
-            </svg>
+            <img src="{{ asset('customer/assets/images/logos/logo.png') }}" class="w-8 h-8 object-contain" alt="Logo">
         </div>
 
         <div class="card-title">Admin Login</div>

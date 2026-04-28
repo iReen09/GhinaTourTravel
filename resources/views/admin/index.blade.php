@@ -262,7 +262,7 @@
                         <th>Nama Pemesan</th>
                         <th>No. HP</th>
                         <th>Paket</th>
-                        <th>Jumlah Orang</th>
+                        <th>Pax</th>
                         <th>Tanggal Tour</th>
                         <th>Total Harga</th>
                         <th>Status</th>
@@ -276,7 +276,7 @@
                             <td style="font-weight:500;">{{ $p->nama_pemesan }}</td>
                             <td style="color:var(--text-muted);">{{ $p->no_hp }}</td>
                             <td>{{ $p->paket->nama_paket ?? '-' }}</td>
-                            <td>{{ $p->jumlah_orang }} orang</td>
+                            <td>{{ $p->jumlah_orang }} pax</td>
                             <td>{{ \Carbon\Carbon::parse($p->tanggal_acara)->format('d M Y') }}</td>
                             <td style="font-weight:600;">Rp {{ number_format($p->total_harga, 0, ',', '.') }}</td>
                             <td>

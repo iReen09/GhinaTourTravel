@@ -395,11 +395,20 @@ class PaketSeeder extends Seeder
             ]);
 
             foreach ($paketData['tempats'] as $namaTempat) {
-                DB::table('tempats')->insert([
+                $tempatId = DB::table('tempats')->insertGetId([
                     'nama_tempat' => $namaTempat,
                     'id_paket'    => $paketId,
                     'created_at'  => now(),
                     'updated_at'  => now(),
+                ]);
+
+                // Tambahkan foto gallery (Unsplash) untuk setiap tempat
+                $keywords = str_replace(' ', ',', $namaTempat);
+                DB::table('galleries')->insert([
+                    'id_tempat' => $tempatId,
+                    'path'      => "https://source.unsplash.com/featured/?travel,{$keywords}",
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
 

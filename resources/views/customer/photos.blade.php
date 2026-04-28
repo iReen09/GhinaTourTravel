@@ -102,9 +102,9 @@
                     $color = $colors[$index % count($colors)];
                     ?>
                     <div class="foto-item relative group"
-                        onclick="openLightbox('{{ $foto->path ? asset('storage/' . $foto->path) : '' }}', '{{ $foto->paket->nama_paket ?? 'Galeri Foto' }}', '{{ $color }}')">
+                        onclick="openLightbox('{{ $foto->path ? (Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path)) : '' }}', '{{ $foto->paket->nama_paket ?? 'Galeri Foto' }}', '{{ $color }}')">
                         @if ($foto->path)
-                            <img src="{{ asset('storage/' . $foto->path) }}" alt="{{ $foto->paket->nama_paket ?? 'Galeri' }}"
+                            <img src="{{ Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path) }}" alt="{{ $foto->paket->nama_paket ?? 'Galeri' }}"
                                 class="w-full h-full object-cover" />
                         @else
                             <div class="w-full h-full flex items-center justify-center"

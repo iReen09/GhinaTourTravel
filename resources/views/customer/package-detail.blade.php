@@ -68,8 +68,9 @@
     <!-- HERO / HEADER PAKET -->
     <div class="relative h-[260px] w-full overflow-hidden mt-[72px]">
         @if ($paket->fotos && $paket->fotos->count() > 0)
-            <img src="{{ asset('storage/' . $paket->fotos->first()->path) }}" alt="{{ $paket->nama_paket }}"
-                class="absolute inset-0 w-full h-full object-cover" />
+            @php $firstFoto = $paket->fotos->first(); @endphp
+            <img src="{{ Str::startsWith($firstFoto->path, 'http') ? $firstFoto->path : asset('storage/' . $firstFoto->path) }}"
+                alt="{{ $paket->nama_paket }}" class="absolute inset-0 w-full h-full object-cover" />
             <div class="absolute inset-0" style="background:rgba(0,0,0,.45);"></div>
         @else
             <div class="absolute inset-0" style="background:linear-gradient(135deg,#78350f,#d97706);"></div>
@@ -92,6 +93,11 @@
                     @foreach ($paket->tempats as $tempat)
                         <div class="relative h-[180px] rounded-xl overflow-hidden"
                             style="background:linear-gradient(135deg,#7c3f00,#c97a1a);">
+                            @if ($tempat->galleries && $tempat->galleries->count() > 0)
+                                @php $firstGal = $tempat->galleries->first(); @endphp
+                                <img src="{{ Str::startsWith($firstGal->path, 'http') ? $firstGal->path : asset('storage/' . $firstGal->path) }}"
+                                    alt="{{ $tempat->nama_tempat }}" class="absolute inset-0 w-full h-full object-cover" />
+                            @endif
                             <div class="absolute inset-0 flex flex-col justify-end p-3"
                                 style="background:linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);">
                                 <p class="text-white font-semibold text-sm">{{ $tempat->nama_tempat }}</p>
@@ -109,7 +115,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     @foreach ($paket->fotos as $foto)
                         <div class="relative h-[180px] rounded-xl overflow-hidden">
-                            <img src="{{ asset('storage/' . $foto->path) }}"
+                            <img src="{{ Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path) }}"
                                 alt="{{ $foto->keterangan ?? $paket->nama_paket }}" class="w-full h-full object-cover" />
                             @if ($foto->keterangan)
                                 <div class="absolute bottom-0 left-0 right-0 p-2"

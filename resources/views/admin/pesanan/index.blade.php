@@ -33,7 +33,7 @@
                             Tanggal Acara</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider border-b border-neutral-200 dark:border-neutral-700">
-                            Jumlah Orang</th>
+                            Pax</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider border-b border-neutral-200 dark:border-neutral-700">
                             Total</th>
@@ -57,12 +57,19 @@
                             <td class="px-4 py-3 text-sm">{{ $p->paket->nama_paket ?? '-' }}</td>
                             <td class="px-4 py-3 text-sm">{{ \Carbon\Carbon::parse($p->tanggal_acara)->format('d M Y') }}
                             </td>
-                            <td class="px-4 py-3 text-sm">{{ $p->jumlah_orang ?? '-' }} orang</td>
-                            <td class="px-4 py-3 text-sm font-semibold text-green-700">
-                                Rp {{ number_format($p->total_harga, 0, ',', '.') }}
+                            <td class="px-4 py-3 text-sm">{{ $p->jumlah_orang ?? '-' }} pax</td>
+                            <td class="px-4 py-3 text-sm">
                                 @if ($p->diskon > 0)
-                                    <div class="text-xs font-normal text-red-400">Diskon: {{ $p->diskon }}%</div>
+                                    @php
+                                        $originalPrice = ($p->paket->harga_paket ?? 0) * ($p->jumlah_orang ?? 0);
+                                    @endphp
+                                    <div class="text-xs text-neutral-400 line-through">
+                                        Rp {{ number_format($originalPrice, 0, ',', '.') }}
+                                    </div>
                                 @endif
+                                <div class="font-semibold text-green-700">
+                                    Rp {{ number_format($p->total_harga, 0, ',', '.') }}
+                                </div>
                             </td>
                             <td class="px-4 py-3">
                                 <span

@@ -1,8 +1,3 @@
-@php
-    // Ambil data company profile dari database, fallback ke nilai default jika belum ada
-    $companyProfile = $companyProfile ?? \App\Models\CompanyProfile::first();
-@endphp
-
 <footer class="mt-20 w-full px-14 py-16 text-white">
     <div class="mx-auto grid max-w-[1280px] grid-cols-4 gap-10">
         <div>
@@ -38,41 +33,42 @@
             </ul>
         </div>
 
+        {{-- Kontak --}}
         <div>
             <h4 class="mb-4 font-bold">Kontak</h4>
-            <ul class="space-y-2 text-sm text-gray-400">
+            <ul class="space-y-4 text-sm text-gray-400">
                 @if ($companyProfile?->address)
-                    <li>📍 {{ $companyProfile->address }}</li>
-                @else
-                    <li>📍 Jl. Wisata No. 123, Jakarta</li>
+                    <li class="flex items-start gap-3">
+                        <img src="{{ asset('customer/icon/address.svg') }}" class="h-5 w-5 mt-0.5" alt="Address" />
+                        <span>{{ $companyProfile->address }}</span>
+                    </li>
                 @endif
 
                 @if ($companyProfile?->whatsapp)
-                    <li>
+                    <li class="flex items-center gap-3">
+                        <img src="{{ asset('customer/icon/whatsapp.svg') }}" class="h-5 w-5" alt="WhatsApp" />
                         <a href="https://wa.me/{{ preg_replace('/\D/', '', $companyProfile->whatsapp) }}"
                             target="_blank" class="hover:text-yellow-500 transition-colors">
-                            📞 {{ $companyProfile->whatsapp }}
+                            {{ $companyProfile->whatsapp }}
                         </a>
                     </li>
-                @else
-                    <li>📞 +62 812-3456-7890</li>
                 @endif
 
                 @if ($companyProfile?->email)
-                    <li>
+                    <li class="flex items-center gap-3">
+                        <img src="{{ asset('customer/icon/gmail.svg') }}" class="h-5 w-5" alt="Email" />
                         <a href="mailto:{{ $companyProfile->email }}" class="hover:text-yellow-500 transition-colors">
-                            ✉️ {{ $companyProfile->email }}
+                            {{ $companyProfile->email }}
                         </a>
                     </li>
-                @else
-                    <li>✉️ info@ghinatour.com</li>
                 @endif
 
                 @if ($companyProfile?->instagram)
-                    <li>
-                        <a href="https://instagram.com/{{ ltrim($companyProfile->instagram, '@') }}" target="_blank"
+                    <li class="flex items-center gap-3">
+                        <img src="{{ asset('customer/icon/instagram.svg') }}" class="h-5 w-5" alt="Instagram" />
+                        <a href="https://www.instagram.com/{{ ltrim($companyProfile->instagram, '@') }}" target="_blank"
                             class="hover:text-yellow-500 transition-colors">
-                            📸 {{ $companyProfile->instagram }}
+                             {{ $companyProfile->instagram }}
                         </a>
                     </li>
                 @endif
