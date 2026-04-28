@@ -33,11 +33,7 @@
                             Tanggal Acara</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider border-b border-neutral-200 dark:border-neutral-700">
-<<<<<<< HEAD
-                            Pax</th>
-=======
                             Jumlah Pax</th>
->>>>>>> 02c8e12 (Align dashboard table and merge UI/price fixes)
                         <th
                             class="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider border-b border-neutral-200 dark:border-neutral-700">
                             Total</th>

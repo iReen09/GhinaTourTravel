@@ -66,9 +66,9 @@
                 @if ($companyProfile?->instagram)
                     <li class="flex items-center gap-3">
                         <img src="{{ asset('customer/icon/instagram.svg') }}" class="h-5 w-5" alt="Instagram" />
-                        <a href="https://www.instagram.com/{{ ltrim($companyProfile->instagram, '@') }}" target="_blank"
-                            class="hover:text-yellow-500 transition-colors">
-                             {{ $companyProfile->instagram }}
+                        <a href="https://www.instagram.com/ghinatourandtravel/{{ ltrim($companyProfile->instagram, '@') }}"
+                            target="_blank" class="hover:text-yellow-500 transition-colors">
+                            {{ $companyProfile->instagram }}
                         </a>
                     </li>
                 @endif
