@@ -28,7 +28,8 @@
                 <table class="w-full text-sm">
                     <tr class="border-b border-neutral-100 dark:border-neutral-800">
                         <td class="py-3 pr-4 text-neutral-500 w-36">Diunggah</td>
-                        <td class="py-3 font-medium">{{ $id->created_at ? $id->created_at->format('d F Y, H:i') : '-' }}</td>
+                        <td class="py-3 font-medium">{{ $id->created_at ? $id->created_at->format('d F Y, H:i') : '-' }}
+                        </td>
                     </tr>
                     @if ($id->tempat)
                         <tr class="border-b border-neutral-100 dark:border-neutral-800">
