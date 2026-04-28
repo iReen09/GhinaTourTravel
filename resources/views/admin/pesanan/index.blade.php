@@ -33,7 +33,11 @@
                             Tanggal Acara</th>
                         <th
                             class="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider border-b border-neutral-200 dark:border-neutral-700">
+<<<<<<< HEAD
                             Pax</th>
+=======
+                            Jumlah Pax</th>
+>>>>>>> 02c8e12 (Align dashboard table and merge UI/price fixes)
                         <th
                             class="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wider border-b border-neutral-200 dark:border-neutral-700">
                             Total</th>
@@ -59,17 +63,16 @@
                             </td>
                             <td class="px-4 py-3 text-sm">{{ $p->jumlah_orang ?? '-' }} pax</td>
                             <td class="px-4 py-3 text-sm">
+                                <div class="font-semibold text-neutral-800 dark:text-neutral-200">
+                                    Rp
+                                    {{ number_format(($p->paket->harga_paket ?? 0) * ($p->jumlah_orang ?? 0), 0, ',', '.') }}
+                                </div>
                                 @if ($p->diskon > 0)
-                                    @php
-                                        $originalPrice = ($p->paket->harga_paket ?? 0) * ($p->jumlah_orang ?? 0);
-                                    @endphp
-                                    <div class="text-xs text-neutral-400 line-through">
-                                        Rp {{ number_format($originalPrice, 0, ',', '.') }}
+                                    <div class="text-xs text-green-600 dark:text-green-400 font-medium mt-0.5">
+                                        Total: Rp {{ number_format($p->total_harga, 0, ',', '.') }} (Disc
+                                        {{ $p->diskon }}%)
                                     </div>
                                 @endif
-                                <div class="font-semibold text-green-700">
-                                    Rp {{ number_format($p->total_harga, 0, ',', '.') }}
-                                </div>
                             </td>
                             <td class="px-4 py-3">
                                 <span

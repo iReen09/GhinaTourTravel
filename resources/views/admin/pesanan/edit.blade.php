@@ -124,12 +124,18 @@
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="sm:col-span-2">
-                    <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 flex items-center justify-between mb-4">
-                        <span class="font-semibold text-green-700 dark:text-green-400">Total Setelah Diskon</span>
-                        <span id="total-akhir" class="text-xl font-bold text-green-700 dark:text-green-400">
-                            Rp {{ number_format($id->total_harga, 0, ',', '.') }}
-                        </span>
+                <div class="sm:col-span-2 space-y-3">
+                    <div
+                        class="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-4 flex items-center justify-between border border-neutral-200 dark:border-neutral-700">
+                        <span class="font-medium text-neutral-600 dark:text-neutral-400">Subtotal (Sebelum Diskon)</span>
+                        <span id="subtotal-label" class="text-lg font-bold text-neutral-800 dark:text-neutral-200">Rp
+                            0</span>
+                    </div>
+                    <div
+                        class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 flex items-center justify-between border border-green-200 dark:border-green-800">
+                        <span class="font-semibold text-green-700 dark:text-green-400">Total Akhir (Setelah Diskon)</span>
+                        <span id="total-akhir" class="text-2xl font-bold text-green-700 dark:text-green-400">Rp
+                            {{ number_format($id->total_harga, 0, ',', '.') }}</span>
                     </div>
                 </div>
                 <div class="sm:col-span-2">
@@ -177,6 +183,7 @@
             const total = Math.round(subtotal * (1 - diskon / 100));
 
             document.getElementById('total_harga').value = total;
+            document.getElementById('subtotal-label').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
             document.getElementById('total-akhir').textContent = 'Rp ' + total.toLocaleString('id-ID');
         }
 

@@ -14,7 +14,7 @@ class PesananController extends Controller
      */
     public function index()
     {
-        $pesanans = Pesanan::latest()->paginate(10);
+        $pesanans = Pesanan::with('paket')->latest()->paginate(10);
         return view('admin.pesanan.index', compact('pesanans'));
     }
 
@@ -39,7 +39,6 @@ class PesananController extends Controller
             'diskon'        => 'nullable|numeric|min:0|max:100',
             'total_harga'   => 'required|numeric|min:0',
             'tanggal_acara' => 'required|date',
-            // FIX: tambah validasi jumlah_orang yang hilang dari store()
             'jumlah_orang'  => 'required|integer|min:1',
         ]);
 
@@ -48,7 +47,6 @@ class PesananController extends Controller
             'nama_pemesan'  => $request->nama_pemesan,
             'no_hp'         => $request->no_hp,
             'diskon'        => $request->diskon ?? 0,
-            // FIX: hitung total_harga konsisten — ambil dari request (sudah dihitung di frontend)
             'total_harga'   => $request->total_harga,
             'jumlah_orang'  => $request->jumlah_orang,
             'tanggal_acara' => $request->tanggal_acara,
@@ -62,9 +60,9 @@ class PesananController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Pesanan $pesanan)
     {
-        $pesanan = Pesanan::with('paket')->findOrFail($id);
+        $pesanan->load('paket');
         return view('admin.pesanan.show', compact('pesanan'));
     }
 
@@ -73,9 +71,7 @@ class PesananController extends Controller
      */
     public function edit(Pesanan $pesanan)
     {
-        // FIX: rename parameter dari $id ke $pesanan agar route model binding bekerja benar
-        // Gunakan variable $id agar view edit.blade.php yang menggunakan $id tetap kompatibel
-        $id = $pesanan;
+        $id = $pesanan; // Keep $id for view compatibility
         $pakets = Paket::with(['fasilitas', 'tempats'])->get();
         return view('admin.pesanan.edit', compact('id', 'pakets'));
     }
@@ -83,7 +79,7 @@ class PesananController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Pesanan $pesanan)
     {
         $request->validate([
             'id_paket'      => 'required|exists:pakets,id',
@@ -96,9 +92,6 @@ class PesananController extends Controller
             'status'        => 'nullable|in:pending,batal,selesai',
         ]);
 
-        $pesanan = Pesanan::findOrFail($id);
-
-        // FIX: gunakan only() bukan $request->all() agar tidak ada field berbahaya yang masuk (misal invoice)
         $pesanan->update($request->only([
             'id_paket',
             'nama_pemesan',
@@ -118,7 +111,6 @@ class PesananController extends Controller
      */
     public function destroy(Pesanan $pesanan)
     {
-        // FIX: rename $id ke $pesanan agar route model binding sesuai konvensi Laravel
         $pesanan->delete();
         return redirect()->route('admin.pesanan.index')->with('success', 'Pesanan berhasil dihapus.');
     }
