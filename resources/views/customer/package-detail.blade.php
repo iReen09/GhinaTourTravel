@@ -108,27 +108,6 @@
             </div>
         @endif
 
-        <!-- Gallery Photos if available -->
-        @if ($paket->fotos && $paket->fotos->count() > 1)
-            <div class="mb-10">
-                <h2 class="text-[22px] font-bold t mb-4">Galeri Foto</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    @foreach ($paket->fotos as $foto)
-                        <div class="relative h-[180px] rounded-xl overflow-hidden">
-                            <img src="{{ Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path) }}"
-                                alt="{{ $foto->keterangan ?? $paket->nama_paket }}" class="w-full h-full object-cover" />
-                            @if ($foto->keterangan)
-                                <div class="absolute bottom-0 left-0 right-0 p-2"
-                                    style="background:linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);">
-                                    <p class="text-white text-xs">{{ $foto->keterangan }}</p>
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-
         <!-- Description -->
         <div class="mb-10">
             <h2 class="text-[22px] font-bold t mb-4">Deskripsi Paket</h2>
@@ -240,6 +219,17 @@
                         </div>
                     </div>
                 @endif
+
+                {{-- Rundown (Hanya terlihat oleh Admin yang login) --}}
+                @auth
+                    @if ($paket->rundown)
+                        <hr class="my-5" style="border-color:var(--border);" />
+                        <div>
+                            <p class="font-semibold t mb-2 text-[15px]">📋 Rundown Perjalanan</p>
+                            <div class="tm text-sm leading-7 whitespace-pre-line">{{ $paket->rundown }}</div>
+                        </div>
+                    @endif
+                @endauth
             </div>
 
             <!-- Harga & CTA -->

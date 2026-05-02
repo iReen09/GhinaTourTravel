@@ -39,6 +39,12 @@
             object-fit: contain;
         }
 
+        #lightbox-video {
+            max-width: 80vw;
+            max-height: 80vh;
+            border-radius: 12px;
+        }
+
         #lightbox-close {
             position: absolute;
             top: 24px;
@@ -48,6 +54,7 @@
             cursor: pointer;
             font-weight: 300;
             line-height: 1;
+            z-index: 10;
         }
 
         #lightbox-label {
@@ -82,6 +89,16 @@
             opacity: 0.4;
             cursor: default;
         }
+
+        .video-play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,.25);
+            z-index: 2;
+        }
     </style>
 @endsection
 
@@ -97,14 +114,23 @@
             <!-- Grid 6 kolom -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
                 @foreach ($fotos as $index => $foto)
-                    <?php
-                    $colors = ['#7c3f00', '#c97a1a', '#1e3a5f', '#2d6a9f', '#1a5c2e', '#2e9952', '#3b0764', '#6d28d9', '#7f1d1d', '#dc2626', '#134e4a', '#0d9488'];
-                    $color = $colors[$index % count($colors)];
-                    ?>
+                    @php
+                        $colors = ['#7c3f00', '#c97a1a', '#1e3a5f', '#2d6a9f', '#1a5c2e', '#2e9952', '#3b0764', '#6d28d9', '#7f1d1d', '#dc2626', '#134e4a', '#0d9488'];
+                        $color = $colors[$index % count($colors)];
+                        $mediaSrc = $foto->path ? (Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path)) : '';
+                        $isVideo = $foto->type === 'video';
+                    @endphp
                     <div class="foto-item relative group"
-                        onclick="openLightbox('{{ $foto->path ? (Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path)) : '' }}', '{{ $foto->paket->nama_paket ?? 'Galeri Foto' }}', '{{ $color }}')">
-                        @if ($foto->path)
-                            <img src="{{ Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path) }}" alt="{{ $foto->paket->nama_paket ?? 'Galeri' }}"
+                        onclick="openLightbox('{{ $mediaSrc }}', '{{ $foto->paket->nama_paket ?? 'Galeri' }}', '{{ $color }}', {{ $isVideo ? 'true' : 'false' }})">
+                        @if ($isVideo && $foto->path)
+                            <video class="w-full h-full object-cover" muted preload="metadata">
+                                <source src="{{ $mediaSrc }}" type="video/mp4">
+                            </video>
+                            <div class="video-play-overlay">
+                                <svg class="w-12 h-12 text-white/80" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        @elseif ($foto->path)
+                            <img src="{{ $mediaSrc }}" alt="{{ $foto->paket->nama_paket ?? 'Galeri' }}"
                                 class="w-full h-full object-cover" />
                         @else
                             <div class="w-full h-full flex items-center justify-center"
@@ -115,7 +141,7 @@
                                 </svg>
                             </div>
                         @endif
-                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-end p-2">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-end p-2" style="z-index:3;">
                             @if ($foto->paket)
                                 <p
                                     class="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
@@ -166,8 +192,11 @@
     <!-- LIGHTBOX -->
     <div id="lightbox" onclick="closeLightbox()">
         <span id="lightbox-close" onclick="closeLightbox()">×</span>
-        <div id="lightbox-inner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+        <div id="lightbox-inner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;" onclick="event.stopPropagation()">
             <img id="lightbox-img" src="" alt="" style="display:none;" />
+            <video id="lightbox-video" controls style="display:none;">
+                <source id="lightbox-video-src" src="" type="video/mp4">
+            </video>
             <div id="lightbox-ph"
                 style="width:500px;height:350px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;">
                 <svg id="lightbox-icon" style="width:48px;height:48px;color:rgba(255,255,255,0.5);" fill="currentColor"
@@ -176,7 +205,7 @@
                         d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
                 </svg>
                 <p id="lightbox-label2" style="color:rgba(255,255,255,0.8);font-size:15px;font-weight:600;"></p>
-                <p style="color:rgba(255,255,255,0.5);font-size:12px;">Foto dokumentasi tour</p>
+                <p style="color:rgba(255,255,255,0.5);font-size:12px;">Dokumentasi tour</p>
             </div>
         </div>
     </div>
@@ -184,29 +213,40 @@
 
 @section('extra_scripts')
     <script>
-        function openLightbox(src, label, color) {
+        function openLightbox(src, label, color, isVideo = false) {
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightbox-img');
+            const video = document.getElementById('lightbox-video');
+            const videoSrc = document.getElementById('lightbox-video-src');
             const ph = document.getElementById('lightbox-ph');
             const label2 = document.getElementById('lightbox-label2');
 
-            if (src) {
+            // Reset
+            img.style.display = 'none';
+            video.style.display = 'none';
+            ph.style.display = 'none';
+
+            if (src && isVideo) {
+                videoSrc.src = src;
+                video.load();
+                video.style.display = 'block';
+            } else if (src) {
                 img.src = src;
                 img.style.display = 'block';
-                ph.style.display = 'none';
             } else {
-                img.style.display = 'none';
                 ph.style.display = 'flex';
                 ph.style.background = color;
             }
 
-            label2.textContent = label || 'Galeri Foto';
+            label2.textContent = label || 'Galeri';
             lightbox.classList.add('open');
             document.body.style.overflow = 'hidden';
         }
 
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
+            const video = document.getElementById('lightbox-video');
+            video.pause();
             lightbox.classList.remove('open');
             document.body.style.overflow = '';
         }

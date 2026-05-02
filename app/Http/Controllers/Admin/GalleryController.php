@@ -16,7 +16,7 @@ class GalleryController extends Controller
     public function index()
     {
         // FIX: get() tidak menerima argumen — gunakan latest()->get() untuk semua data
-        $galleries = Gallery::with(['tempat', 'fasilitas'])->latest()->get();
+        $galleries = Gallery::with(['tempat.paket', 'fasilitas.paket'])->latest()->get();
         return view('admin.gallery.index', compact('galleries'));
     }
 
@@ -36,30 +36,110 @@ class GalleryController extends Controller
         return view('admin.gallery.show', compact('gallery'));
     }
 
+    /**
+     * AJAX: Get tempat & fasilitas for a given paket.
+     */
+    public function getRelationsByPaket(Request $request)
+    {
+        $paket = Paket::with(['tempats', 'fasilitas'])->find($request->paket_id);
+
+        if (!$paket) {
+            return response()->json(['tempats' => [], 'fasilitas' => []]);
+        }
+
+        return response()->json([
+            'tempats' => $paket->tempats->map(fn($t) => ['id' => $t->id, 'nama' => $t->nama_tempat]),
+            'fasilitas' => $paket->fasilitas->map(fn($f) => ['id' => $f->id, 'nama' => $f->nama_fasilitas]),
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.
+     * Supports images & videos. No FFMpeg — just file size limits.
      */
     public function store(Request $request)
     {
-        // FIX: tambah validasi 'images' => 'array' agar array validation bekerja dengan benar
         $request->validate([
-            'images'       => 'required|array',
-            'images.*'     => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'media'        => 'required|array',
+            'media.*'      => 'file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,avi|max:51200', // 50MB max
             'id_fasilitas' => 'nullable|exists:fasilitas,id',
             'id_tempat'    => 'nullable|exists:tempats,id',
         ]);
 
-        foreach ($request->file('images') as $image) {
-            $path = $image->store('galleries', 'public');
+        foreach ($request->file('media') as $file) {
+            $mime = $file->getMimeType();
+            $type = str_starts_with($mime, 'video/') ? 'video' : 'image';
+
+            // Compress images using GD (no external library needed)
+            if ($type === 'image') {
+                $path = $this->compressAndStoreImage($file);
+            } else {
+                // Store video directly (no FFMpeg)
+                $path = $file->store('galleries', 'public');
+            }
+
             Gallery::create([
                 'path'         => $path,
+                'type'         => $type,
                 'id_fasilitas' => $request->id_fasilitas,
                 'id_tempat'    => $request->id_tempat,
             ]);
         }
 
-        return redirect()->route('admin.gallery.index')->with('success', 'Gallery berhasil ditambahkan');
+        return redirect()->route('admin.gallery.index')->with('success', 'Media berhasil ditambahkan');
+    }
+
+    /**
+     * Compress image using GD and store it.
+     */
+    private function compressAndStoreImage($file): string
+    {
+        $extension = strtolower($file->getClientOriginalExtension());
+        $filename = 'galleries/' . uniqid() . '_' . time() . '.jpg';
+
+        // Create image resource from uploaded file
+        $image = match ($extension) {
+            'png' => imagecreatefrompng($file->getRealPath()),
+            'gif' => imagecreatefromgif($file->getRealPath()),
+            'webp' => imagecreatefromwebp($file->getRealPath()),
+            default => imagecreatefromjpeg($file->getRealPath()),
+        };
+
+        if (!$image) {
+            // Fallback: store without compression
+            return $file->store('galleries', 'public');
+        }
+
+        // Resize if too large (max 1920px width)
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $maxWidth = 1920;
+
+        if ($width > $maxWidth) {
+            $newHeight = (int) ($height * ($maxWidth / $width));
+            $resized = imagecreatetruecolor($maxWidth, $newHeight);
+
+            // Preserve transparency for PNG
+            if ($extension === 'png') {
+                imagealphablending($resized, false);
+                imagesavealpha($resized, true);
+            }
+
+            imagecopyresampled($resized, $image, 0, 0, 0, 0, $maxWidth, $newHeight, $width, $height);
+            imagedestroy($image);
+            $image = $resized;
+        }
+
+        // Save as JPEG with 75% quality
+        $storagePath = storage_path('app/public/' . $filename);
+        $dir = dirname($storagePath);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        imagejpeg($image, $storagePath, 75);
+        imagedestroy($image);
+
+        return $filename;
     }
 
 
@@ -75,6 +155,6 @@ class GalleryController extends Controller
         }
 
         $gallery->delete();
-        return redirect()->route('admin.gallery.index')->with('success', 'Gallery berhasil dihapus');
+        return redirect()->route('admin.gallery.index')->with('success', 'Media berhasil dihapus');
     }
 }

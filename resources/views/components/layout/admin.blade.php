@@ -100,6 +100,17 @@
                         </svg>
                         Gallery
                     </a>
+
+                    <a href="{{ route('admin.company-profile.show', 1) }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+                    {{ request()->routeIs('admin.company-profile.*') ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800' }}">
+                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                            class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                        </svg>
+                        Company Profile
+                    </a>
                 </nav>
 
                 <div class="px-3 py-4 border-t border-neutral-200 dark:border-neutral-800">
@@ -135,6 +146,17 @@
                         </button>
                         <h2 class="text-base lg:text-lg font-semibold">@yield('header', 'Dashboard')</h2>
                     </div>
+
+                    {{-- Dark Mode Toggle --}}
+                    <button id="adminThemeToggle" type="button" title="Ganti tema"
+                        class="p-2 rounded-lg text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors focus:outline-none">
+                        <svg id="adminSunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <svg id="adminMoonIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
 
                     {{-- Profile Dropdown --}}
                     <div class="relative">
@@ -242,6 +264,36 @@
                 menu.classList.add('hidden');
             }
         });
+
+        // ── Admin Dark Mode Toggle ──
+        (function() {
+            const html = document.documentElement;
+            const toggleBtn = document.getElementById('adminThemeToggle');
+            const sunIcon = document.getElementById('adminSunIcon');
+            const moonIcon = document.getElementById('adminMoonIcon');
+
+            function applyTheme(isDark) {
+                if (isDark) {
+                    html.classList.add('dark');
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                } else {
+                    html.classList.remove('dark');
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                }
+            }
+
+            // Load saved preference
+            const saved = localStorage.getItem('admin-theme');
+            applyTheme(saved === 'dark');
+
+            toggleBtn?.addEventListener('click', function() {
+                const isDark = !html.classList.contains('dark');
+                localStorage.setItem('admin-theme', isDark ? 'dark' : 'light');
+                applyTheme(isDark);
+            });
+        })();
     </script>
 
     {{-- ── Chatbot Widget (Admin Only) ── --}}

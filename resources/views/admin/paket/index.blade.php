@@ -246,6 +246,7 @@
                         <th>Durasi</th>
                         <th>Harga / Pax</th>
                         <th>Komponen</th>
+                        <th>Rundown</th>
                         <th style="width:120px;text-align:center;">Aksi</th>
                     </tr>
                 </thead>
@@ -357,6 +358,17 @@
                                 </div>
                             </td>
 
+                            {{-- Rundown --}}
+                            <td>
+                                @if ($paket->rundown)
+                                    <p style="font-size:12px;color:var(--text-muted);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="{{ $paket->rundown }}">
+                                        {{ Str::limit($paket->rundown, 60) }}
+                                    </p>
+                                @else
+                                    <span style="font-size:12px;color:var(--text-muted);">—</span>
+                                @endif
+                            </td>
+
                             {{-- Aksi --}}
                             <td style="text-align:center;">
                                 <div style="display:inline-flex;align-items:center;gap:2px;">
@@ -396,7 +408,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" style="padding:60px 20px;text-align:center;">
+                            <td colspan="7" style="padding:60px 20px;text-align:center;">
                                 <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
                                     <div
                                         style="width:60px;height:60px;border-radius:50%;background:var(--table-head);

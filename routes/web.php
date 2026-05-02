@@ -42,6 +42,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         'update'
     ]);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // AJAX endpoint for gallery dependent dropdown
+    Route::get('/api/gallery/relations', [GalleryController::class, 'getRelationsByPaket'])->name('gallery.relations');
 });
 
 /*

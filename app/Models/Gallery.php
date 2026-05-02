@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
-    protected $fillable = ['path', 'keterangan', 'id_fasilitas', 'id_tempat'];
+    protected $fillable = ['path', 'keterangan', 'type', 'id_fasilitas', 'id_tempat'];
 
     public function fasilitas()
     {
@@ -33,5 +33,12 @@ class Gallery extends Model
             'id_paket'      // tempats.id_paket
         );
     }
-}
 
+    /**
+     * Check if the gallery item is a video.
+     */
+    public function isVideo(): bool
+    {
+        return $this->type === 'video';
+    }
+}

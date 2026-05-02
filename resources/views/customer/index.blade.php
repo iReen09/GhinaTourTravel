@@ -242,7 +242,14 @@
             @forelse($fotos as $index => $foto)
                 <div class="galeri-item h-[185px] flex items-center justify-center flex-col gap-1 text-white/60 relative"
                     style="@if ($index % 5 == 0) background:linear-gradient(135deg,#7c3f00,#c97a1a); @elseif($index % 5 == 1) background:linear-gradient(135deg,#1e3a8a,#0369a1); @elseif($index % 5 == 2) background:linear-gradient(135deg,#78350f,#d97706); @elseif($index % 5 == 3) background:linear-gradient(135deg,#134e4a,#0d9488); @else background:linear-gradient(135deg,#3b0764,#6d28d9); @endif">
-                    @if ($foto->path)
+                    @if ($foto->type === 'video' && $foto->path)
+                        <video class="absolute inset-0 w-full h-full object-cover" muted preload="metadata">
+                            <source src="{{ asset('storage/' . $foto->path) }}" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
+                            <svg class="w-10 h-10 text-white/80" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                    @elseif ($foto->path)
                         <img src="{{ Str::startsWith($foto->path, 'http') ? $foto->path : asset('storage/' . $foto->path) }}" alt="{{ $foto->keterangan ?? 'Galeri' }}"
                             class="absolute inset-0 w-full h-full object-cover" />
                     @else
@@ -252,7 +259,7 @@
                         </svg>
                     @endif
                     @if ($foto->keterangan)
-                        <p class="text-xs font-medium absolute bottom-2 left-2 right-2 text-center text-white">
+                        <p class="text-xs font-medium absolute bottom-2 left-2 right-2 text-center text-white z-20">
                             {{ $foto->keterangan }}</p>
                     @endif
                 </div>
