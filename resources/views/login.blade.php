@@ -248,7 +248,7 @@
 
         {{-- Logo icon --}}
         <div class="icon-wrap">
-            <img src="{{ asset('customer/assets/images/logos/logo.png') }}" class="w-8 h-8 object-contain" alt="Logo">
+            {{-- <img src="{{ asset('customer/assets/images/logos/logo.png') }}" class="w-8 h-8 object-contain" alt="Logo"> --}}
         </div>
 
         <div class="card-title">Admin Login</div>

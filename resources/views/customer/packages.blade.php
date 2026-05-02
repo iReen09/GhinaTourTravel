@@ -113,7 +113,7 @@
                                             style="background:{{ $durasiColor }};color:{{ $durasiTextColor }};">{{ $paket->durasi ?? '1 Hari' }}</span>
                                         <h3 class="text-[15px] font-bold text-white mt-1">{{ $paket->nama_paket }}</h3>
                                         <p class="text-sm font-semibold" style="color:#f0c94d;">Rp
-                                            {{ number_format($paket->harga_per_pax, 0, ',', '.') }}<span
+                                            {{ number_format($paket->harga_paket, 0, ',', '.') }}<span
                                                 class="text-white font-normal text-xs">/pax</span></p>
                                     </div>
                                 </div>

@@ -46,13 +46,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Chatbot API Routes (Customer Service with RAG)
+| Chatbot API Routes (Admin-only, rule-based)
 |--------------------------------------------------------------------------
 */
-Route::prefix('api/chatbot')->name('chatbot.')->group(function () {
+Route::middleware('auth')->prefix('api/chatbot')->name('chatbot.')->group(function () {
     Route::get('/menu', [ChatbotController::class, 'getMenu'])->name('menu');
     Route::post('/message', [ChatbotController::class, 'handleMessage'])->name('message');
-    Route::post('/search-pesanan', [ChatbotController::class, 'searchPesanan'])->name('search.pesanan');
-    Route::get('/pakets', [ChatbotController::class, 'getPakets'])->name('pakets');
-    Route::get('/company-profile', [ChatbotController::class, 'getCompanyProfile'])->name('company');
 });

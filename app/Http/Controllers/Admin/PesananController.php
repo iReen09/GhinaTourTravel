@@ -12,9 +12,26 @@ class PesananController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pesanans = Pesanan::with('paket')->latest()->paginate(10);
+        $pesanans = Pesanan::with('paket')
+            ->when($request->search, function ($query, $search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('nama_pemesan', 'like', "%{$search}%")
+                      ->orWhere('invoice', 'like', "%{$search}%")
+                      ->orWhere('no_hp', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->when($request->tanggal, function ($query, $tanggal) {
+                $query->whereDate('tanggal_acara', $tanggal);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.pesanan.index', compact('pesanans'));
     }
 

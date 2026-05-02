@@ -3,15 +3,44 @@
 @section('header', 'Daftar Pesanan')
 
 @section('content')
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
         <h1 class="text-2xl font-bold">Pesanan</h1>
-        <a href="{{ route('admin.pesanan.create') }}"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Tambah Pesanan
-        </a>
+        
+        <div class="flex flex-wrap items-center gap-3">
+            <form id="filterForm" action="{{ route('admin.pesanan.index') }}" method="GET" class="flex flex-wrap items-center gap-2">
+                {{-- Search bar with icon inside --}}
+                <div class="relative">
+                    <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" name="search" placeholder="Cari pesanan..." value="{{ request('search') }}"
+                        class="pl-9 pr-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-amber-500 outline-none w-48">
+                </div>
+                
+                {{-- Status dropdown (auto-submit) --}}
+                <select name="status" onchange="document.getElementById('filterForm').submit()"
+                    class="px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-amber-500 outline-none">
+                    <option value="">Semua Status</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                    <option value="batal" {{ request('status') == 'batal' ? 'selected' : '' }}>Batal</option>
+                </select>
+
+                {{-- Date picker (auto-submit) --}}
+                <input type="date" name="tanggal" value="{{ request('tanggal') }}" onchange="document.getElementById('filterForm').submit()"
+                    class="px-3 py-2 text-sm rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-amber-500 outline-none">
+                
+                @if(request()->anyFilled(['search', 'status', 'tanggal']))
+                    <a href="{{ route('admin.pesanan.index') }}" class="text-xs text-red-500 hover:underline font-medium">Reset</a>
+                @endif
+            </form>
+
+            <a href="{{ route('admin.pesanan.create') }}"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Tambah Pesanan
+            </a>
+        </div>
     </div>
 
     <div class="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">

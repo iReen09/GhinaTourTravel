@@ -44,7 +44,7 @@ class PageController extends Controller
      */
     public function packageDetail($id)
     {
-        $paket = Paket::with(['fasilitas', 'tempats'])
+        $paket = Paket::with(['fasilitas', 'tempats.galleries', 'fotos', 'transportasis', 'akomodasis', 'konsumsis'])
             ->findOrFail($id);
 
 
