@@ -1,78 +1,51 @@
 # PT Ghina Tour Travel — Company Profile & Booking System
 
-Aplikasi berbasis web **Company Profile dan Sistem Katalog/Pemesanan Paket Tour** milik **PT Ghina Tour Travel** yang dibangun menggunakan framework **Laravel**.
+A web-based **company profile and tour package catalog/booking system** for **PT Ghina Tour Travel**, built with **Laravel**.
 
-Sistem ini ditujukan untuk mempermudah calon pelanggan menjelajahi paket perjalanan wisata, melihat dokumentasi foto/video galeri tour, dan melakukan pemesanan via WhatsApp, serta menyediakan panel kontrol admin yang lengkap untuk pengelolaan paket, destinasi, fasilitas, pemesanan, dan aset galeri media secara dinamis.
+The core problem we set out to solve: travel agencies still rely heavily on manual processes — phone calls, printed brochures, and spreadsheet-based order tracking. This application centralizes everything into one platform, making it easy for potential customers to browse packages and book instantly, while giving the agency a powerful back-office to manage their content without touching any code.
 
----
+## ✨ Technologies
 
-## 🛠️ Panduan Instalasi & Pengaturan Project
+- `Laravel`
+- `PHP`
+- `MySQL`
+- `Tailwind CSS`
+- `Vite`
 
-Gunakan panduan berikut untuk memasang project di komputer lokal Anda, baik untuk pemasangan pertama kali (**Clone**) maupun saat memperbarui pembaruan dari repository (**Pull**).
+## 🚀 Features
 
-### A. Persiapan Awal (Bagi yang baru pertama kali Clone)
+- Interactive tour package catalog with destination filtering
+- Integrated photo & video gallery documentation per tour
+- One-click booking via WhatsApp, eliminating phone tag
+- Dynamic admin panel for managing packages, facilities, and media assets
+- Automatic dummy data seeder with local image generation for instant local setup
 
-1. **Clone Repository**:
+## 📍 The Process
 
-    ```bash
-    git clone https://github.com/H4N1P/Ghina-Tour-Travel.git
-    cd Ghina-Tour-Travel
-    ```
+**The problem:** Travel agencies lose potential customers because their information is scattered — prices on one sheet, photos on another, bookings via a separate chat. Customers can't self-serve, and agents waste time answering repetitive questions.
 
-2. **Install Dependensi PHP & Node.js**:
+**Our approach:** We broke the problem into two user groups and solved for each independently.
 
-    ```bash
-    composer install
-    npm install
-    ```
+For **customers**, we built a clean, browsable catalog so they can explore packages, view real photos and videos, compare inclusions, and initiate a booking — all without needing to contact anyone first.
 
-3. **Salin File Environment & Generate App Key**:
-    ```bash
-    cp .env.example .env
-    php artisan key:generate
-    ```
-    _Buka file `.env` di text editor Anda, lalu sesuaikan konfigurasi database (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) dengan database MySQL di PC Anda._
+For **admins**, we eliminated the need for any technical knowledge. The Laravel-powered back-office lets the agency update pricing, swap images, add new destinations, and review incoming orders through a simple dashboard — no code, no FTP, no spreadsheets.
 
----
+To keep local development frictionless, we also built an automated seeder that generates dummy image files on-the-fly using PHP GD, so the app never looks empty on a fresh setup.
 
-### B. Sinkronisasi (Bagi yang baru saja melakukan Git Pull)
+## 🚦 Running the Project
 
-Setiap kali Anda melakukan **`git pull`** untuk mengambil update kode terbaru, pastikan untuk selalu menjalankan perintah berikut agar database dan aset lokal Anda tersinkronisasi sempurna:
+1. Clone the repository
+2. Install dependencies: `composer install` & `npm install`
+3. Setup environment: `cp .env.example .env` and configure your database credentials
+4. Generate app key: `php artisan key:generate`
+5. Link storage folder: `php artisan storage:link`
+6. Migrate and seed the database: `php artisan migrate:fresh --seed`
+7. Start the backend server: `php artisan serve`
+8. Start the frontend compiler: `npm run dev`
+9. Open `http://localhost:8000` in your browser
 
-1. **Hubungkan Symlink Folder Storage (Wajib sekali saja)**:
-   Perintah ini akan membuat tautan (shortcut) dari folder `storage/app/public` ke folder publik web `public/storage`:
+## 📦 Preview
 
-    ```bash
-    php artisan storage:link
-    ```
-
-2. **Segarkan Database & Jalankan Seeder Dinamis (Wajib)**:
-   Perintah ini akan memperbarui skema tabel database dan secara otomatis memicu fungsi PHP GD untuk melahirkan file gambar dummy secara lokal di laptop Anda agar halaman web tidak kosong:
-    ```bash
-    php artisan migrate:fresh --seed
-    ```
-
----
-
-### C. Menjalankan Aplikasi
-
-Jalankan server lokal PHP dan builder aset Vite secara bersamaan:
-
-- **Terminal 1** (Untuk Server Backend Laravel):
-
-    ```bash
-    php artisan serve
-    ```
-
-- **Terminal 2** (Untuk Compiler Aset Frontend Vite):
-    ```bash
-    npm run dev
-    ```
-
-Buka browser Anda dan akses aplikasi di alamat: [http://localhost:8000](http://localhost:8000).
-
----
-
-## 📝 Lisensi
-
-Proyek ini dibuat untuk pemenuhan tugas kuliah dan dikembangkan secara internal oleh tim pengembang PT Ghina Tour Travel. Ditulis menggunakan basis framework Laravel open-source berlisensi [MIT license](https://opensource.org/licenses/MIT).
+<video src="preview.mp4" controls="controls" width="100%">
+  Your browser does not support the video tag.
+</video>
